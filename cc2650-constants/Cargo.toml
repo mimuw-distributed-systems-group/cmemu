@@ -1,0 +1,33 @@
+[package]
+name = "cc2650-constants"
+version = "0.1.0"
+edition = "2024"
+description = "Constant values generated from SVD of TI CC2650 for CMEmu (cmemu-lib)."
+homepage = "https://mimuw-distributed-systems-group.github.io/cmemu/"
+repository = "https://github.com/mimuw-distributed-systems-group/cmemu"
+license = "MIT OR Apache-2.0"
+keywords = ["TI CC2650", "SVD", "CMEmu"]
+categories = ["emulators", "embedded"]
+
+[features]
+register-names = ['dep:phf']
+
+# quick & dirty compilation for CC2652
+soc-cc2652 = []
+
+soc-stm32f100rbt6 = []
+
+[dependencies]
+cmemu-common = { path = "../cmemu-common/" }
+modular-bitfield = "0.11"
+log = "0.4"
+num_enum = "0.5"
+phf = { version = "0.11", optional = true, features = ["macros"] }
+
+#[hints]
+## TODO:
+## See https://blog.rust-lang.org/inside-rust/2025/07/15/call-for-testing-hint-mostly-unused/
+#mostly-unused = true
+
+[lints]
+workspace = true

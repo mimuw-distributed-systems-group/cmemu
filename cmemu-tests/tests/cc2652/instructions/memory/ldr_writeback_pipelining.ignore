@@ -1,0 +1,7 @@
+reason: To be researched - fetch and LSU instruction timings in general
+ignored:
+- symbols: ["times", "lsucnts"]
+  configurations:
+  - {'code': 'sram', 'memory': 'sram', 'lbEn': True}
+  - {'code': 'sram', 'memory': 'flash', 'lbEn': True}
+  - {'code': 'sram', 'memory': 'flash', 'lbEn': False}

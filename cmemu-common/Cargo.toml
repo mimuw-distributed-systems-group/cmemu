@@ -1,0 +1,15 @@
+[package]
+name = "cmemu-common"
+version = "0.1.0"
+edition = "2024"
+description = "Stuff shared between multiple crates accompanying CMEmu (cmemu-lib)."
+homepage = "https://mimuw-distributed-systems-group.github.io/cmemu/"
+repository = "https://github.com/mimuw-distributed-systems-group/cmemu"
+license = "MIT OR Apache-2.0"
+keywords = ["CMEmu"]
+categories = ["emulators"]
+
+[dependencies]
+
+[lints]
+workspace = true

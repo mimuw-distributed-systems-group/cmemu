@@ -1,0 +1,9 @@
+reason: Code in sram is still broken
+ignored:
+- symbols: ["times", "lsucnts"]
+  configurations:
+    - { code: sram,  strMemory: sram,  lbEn: True,  ldrMemory: sram,  part: 0}
+    - { code: sram,  strMemory: sram,  lbEn: True,  ldrMemory: flash, part: 0}
+    - { code: sram,  strMemory: sram,  lbEn: False, ldrMemory: flash, part: 0}
+    - { code: sram,  strMemory: sram,  lbEn: True,  ldrMemory: flash, part: 1}
+    - { code: sram,  strMemory: sram,  lbEn: False, ldrMemory: flash, part: 1}

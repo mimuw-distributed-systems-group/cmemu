@@ -1,0 +1,65 @@
+reason: >
+  Supervisor Call is not implemented yet. (But the timings show that the curse is present!)
+ignored:
+- symbols: ["times", "lsucnts", "foldcnts"]
+  configurations:
+    # Stall pos = 0
+    - {stall_pos: 0, "code": "gpram", lbEn: true, xcycles: [0,], paddingtons: [0, 1], }
+    - {stall_pos: 0, "code": "gpram", lbEn: true, xcycles: [0,], paddingtons: [2,], }
+    - {stall_pos: 0, "code": "gpram", lbEn: true, xcycles: [0,], paddingtons: [3], }
+    - {stall_pos: 0, "code": "gpram", lbEn: true, xcycles: [2,], paddingtons: [0,], }
+    - {stall_pos: 0, "code": "gpram", lbEn: true, xcycles: [2,], paddingtons: [1], }
+    - {stall_pos: 0, "code": "gpram", lbEn: true, xcycles: [2,], paddingtons: [2], }
+    - {stall_pos: 0, "code": "gpram", lbEn: true, xcycles: [2,], paddingtons: [3], }
+    - {stall_pos: 0, "code": "sram", lbEn: true, xcycles: [0,], paddingtons: [0, 1], }
+    - {stall_pos: 0, "code": "sram", lbEn: true, xcycles: [0,], paddingtons: [2, 3], }
+    - {stall_pos: 0, "code": "sram", lbEn: true, xcycles: [2,], paddingtons: [0, 1], }
+    - {stall_pos: 0, "code": "sram", lbEn: true, xcycles: [2,], paddingtons: [2, 3], }
+    - {stall_pos: 0, "code": "flash", lbEn: true,   xcycles: [0, 1, 2, 3, 4,], paddingtons: [0, 1], }
+    - {stall_pos: 0, "code": "flash", lbEn: true,   xcycles: [0, 1, 2, 3, 4,], paddingtons: [2, 3], }
+    - {stall_pos: 0, "code": "flash", lbEn: true,   xcycles: [5, 6, 7, 8, 9,], paddingtons: [0, 1], }
+    - {stall_pos: 0, "code": "flash", lbEn: true,   xcycles: [5, 6, 7, 8, 9,], paddingtons: [2, 3], }
+    - {stall_pos: 0, "code": "flash", lbEn: false,  xcycles: [0, 1, 2, 3, 4,], paddingtons: [0, 1],  }
+    - {stall_pos: 0, "code": "flash", lbEn: false,  xcycles: [0, 1, 2, 3, 4,], paddingtons: [2, 3],  }
+    - {stall_pos: 0, "code": "flash", lbEn: false,  xcycles: [5, 6, 7, 8, 9,], paddingtons: [0, 1],  }
+    - {stall_pos: 0, "code": "flash", lbEn: false,  xcycles: [5, 6, 7, 8, 9,], paddingtons: [2, 3],  }
+    # Stall pos = 1
+    - {stall_pos: 1, "code": "gpram", lbEn: true, xcycles: [0,], paddingtons: [0, 1], }
+    - {stall_pos: 1, "code": "gpram", lbEn: true, xcycles: [0,], paddingtons: [2,], }
+    - {stall_pos: 1, "code": "gpram", lbEn: true, xcycles: [0,], paddingtons: [3], }
+    - {stall_pos: 1, "code": "gpram", lbEn: true, xcycles: [2,], paddingtons: [0,], }
+    - {stall_pos: 1, "code": "gpram", lbEn: true, xcycles: [2,], paddingtons: [1], }
+    - {stall_pos: 1, "code": "gpram", lbEn: true, xcycles: [2,], paddingtons: [2,], }
+    - {stall_pos: 1, "code": "gpram", lbEn: true, xcycles: [2,], paddingtons: [3,], }
+    - {stall_pos: 1, "code": "sram", lbEn: true, xcycles: [0,], paddingtons: [0, 1], }
+    - {stall_pos: 1, "code": "sram", lbEn: true, xcycles: [0,], paddingtons: [2, 3], }
+    - {stall_pos: 1, "code": "sram", lbEn: true, xcycles: [2,], paddingtons: [0, 1], }
+    - {stall_pos: 1, "code": "sram", lbEn: true, xcycles: [2,], paddingtons: [2, 3], }
+    - {stall_pos: 1, "code": "flash", lbEn: true,   xcycles: [0, 1, 2, 3, 4,], paddingtons: [0, 1], }
+    - {stall_pos: 1, "code": "flash", lbEn: true,   xcycles: [0, 1, 2, 3, 4,], paddingtons: [2, 3], }
+    - {stall_pos: 1, "code": "flash", lbEn: true,   xcycles: [5, 6, 7, 8, 9,], paddingtons: [0, 1], }
+    - {stall_pos: 1, "code": "flash", lbEn: true,   xcycles: [5, 6, 7, 8, 9,], paddingtons: [2, 3], }
+    - {stall_pos: 1, "code": "flash", lbEn: false,  xcycles: [0, 1, 2, 3, 4,], paddingtons: [0, 1],  }
+    - {stall_pos: 1, "code": "flash", lbEn: false,  xcycles: [0, 1, 2, 3, 4,], paddingtons: [2, 3],  }
+    - {stall_pos: 1, "code": "flash", lbEn: false,  xcycles: [5, 6, 7, 8, 9,], paddingtons: [0, 1],  }
+    - {stall_pos: 1, "code": "flash", lbEn: false,  xcycles: [5, 6, 7, 8, 9,], paddingtons: [2, 3],  }
+    # Stall pos = 2
+    - {stall_pos: 2, "code": "gpram", lbEn: true, xcycles: [0,], paddingtons: [0, 1], }
+    - {stall_pos: 2, "code": "gpram", lbEn: true, xcycles: [0,], paddingtons: [2,], }
+    - {stall_pos: 2, "code": "gpram", lbEn: true, xcycles: [0,], paddingtons: [3], }
+    - {stall_pos: 2, "code": "gpram", lbEn: true, xcycles: [2,], paddingtons: [0,], }
+    - {stall_pos: 2, "code": "gpram", lbEn: true, xcycles: [2,], paddingtons: [1], }
+    - {stall_pos: 2, "code": "gpram", lbEn: true, xcycles: [2,], paddingtons: [2,], }
+    - {stall_pos: 2, "code": "gpram", lbEn: true, xcycles: [2,], paddingtons: [3,], }
+    - {stall_pos: 2, "code": "sram", lbEn: true, xcycles: [0,], paddingtons: [0, 1], }
+    - {stall_pos: 2, "code": "sram", lbEn: true, xcycles: [0,], paddingtons: [2, 3], }
+    - {stall_pos: 2, "code": "sram", lbEn: true, xcycles: [2,], paddingtons: [0, 1], }
+    - {stall_pos: 2, "code": "sram", lbEn: true, xcycles: [2,], paddingtons: [2, 3], }
+    - {stall_pos: 2, "code": "flash", lbEn: true,   xcycles: [0, 1, 2, 3, 4,], paddingtons: [0, 1], }
+    - {stall_pos: 2, "code": "flash", lbEn: true,   xcycles: [0, 1, 2, 3, 4,], paddingtons: [2, 3], }
+    - {stall_pos: 2, "code": "flash", lbEn: true,   xcycles: [5, 6, 7, 8, 9,], paddingtons: [0, 1], }
+    - {stall_pos: 2, "code": "flash", lbEn: true,   xcycles: [5, 6, 7, 8, 9,], paddingtons: [2, 3], }
+    - {stall_pos: 2, "code": "flash", lbEn: false,  xcycles: [0, 1, 2, 3, 4,], paddingtons: [0, 1],  }
+    - {stall_pos: 2, "code": "flash", lbEn: false,  xcycles: [0, 1, 2, 3, 4,], paddingtons: [2, 3],  }
+    - {stall_pos: 2, "code": "flash", lbEn: false,  xcycles: [5, 6, 7, 8, 9,], paddingtons: [0, 1],  }
+    - {stall_pos: 2, "code": "flash", lbEn: false,  xcycles: [5, 6, 7, 8, 9,], paddingtons: [2, 3],  }

@@ -1,0 +1,33 @@
+reason: Execution from SRAM is broken (presumably ldr from SRAM and unaligned ldr/tbh).
+ignored:
+- symbols: ["cyccnt", "lsucnt"]
+  configurations:
+    - { code: "sram", lbEn: false, cacheEn: false, sram_part: 0 }
+    - { code: "sram", lbEn: false, cacheEn: false, sram_part: 1 }
+    - { code: "sram", lbEn: false, cacheEn: false, sram_part: 2 }
+    - { code: "sram", lbEn: false, cacheEn: false, sram_part: 3 }
+    - { code: "sram", lbEn: false, cacheEn: false, sram_part: 4 }
+    - { code: "sram", lbEn: false, cacheEn: false, sram_part: 5 }
+    - { code: "sram", lbEn: false, cacheEn: false, sram_part: 6 }
+    - { code: "sram", lbEn: false, cacheEn: false, sram_part: 7 }
+    - { code: "sram", lbEn: false, cacheEn: false, sram_part: 8 }
+
+    - { code: "sram", lbEn: true, cacheEn: false, sram_part: 0 }
+    - { code: "sram", lbEn: true, cacheEn: false, sram_part: 1 }
+    - { code: "sram", lbEn: true, cacheEn: false, sram_part: 2 }
+    - { code: "sram", lbEn: true, cacheEn: false, sram_part: 3 }
+    - { code: "sram", lbEn: true, cacheEn: false, sram_part: 4 }
+    - { code: "sram", lbEn: true, cacheEn: false, sram_part: 5 }
+    - { code: "sram", lbEn: true, cacheEn: false, sram_part: 6 }
+    - { code: "sram", lbEn: true, cacheEn: false, sram_part: 7 }
+    - { code: "sram", lbEn: true, cacheEn: false, sram_part: 8 }
+
+    - { code: "sram", lbEn: true, cacheEn: true, sram_part: 0 }
+    - { code: "sram", lbEn: true, cacheEn: true, sram_part: 1 }
+    - { code: "sram", lbEn: true, cacheEn: true, sram_part: 2 }
+    - { code: "sram", lbEn: true, cacheEn: true, sram_part: 3 }
+    - { code: "sram", lbEn: true, cacheEn: true, sram_part: 4 }
+    - { code: "sram", lbEn: true, cacheEn: true, sram_part: 5 }
+    - { code: "sram", lbEn: true, cacheEn: true, sram_part: 6 }
+    - { code: "sram", lbEn: true, cacheEn: true, sram_part: 7 }
+    - { code: "sram", lbEn: true, cacheEn: true, sram_part: 8 }

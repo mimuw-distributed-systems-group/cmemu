@@ -1,0 +1,5 @@
+reason: The timing of code in SRAM (main loop here) is out of scope right now.
+ignored:
+- symbols: ["times"]
+  configurations:
+  - { }

@@ -1,0 +1,15 @@
+reason: >
+  Conflict sram-sram works in weird way.
+ignored:
+- symbols: ["times"]
+  configurations:
+  - {code: "sram", memory: "sram", repetitions: 24, strInstr: "str.n", addCount: 0, cache_enabled: True}
+  - {code: "sram", memory: "sram", repetitions: 24, strInstr: "str.n", addCount: 1, cache_enabled: True}
+  - {code: "sram", memory: "sram", repetitions: 24, strInstr: "str.n", addCount: 2, cache_enabled: True}
+  - {code: "sram", memory: "sram", repetitions: 24, strInstr: "str.n", addCount: 3, cache_enabled: True}
+  - {code: "sram", memory: "sram", repetitions: 24, strInstr: "str.n", addCount: 4, cache_enabled: True}
+  - {code: "sram", memory: "sram", repetitions: 16, strInstr: "str.w", addCount: 0, cache_enabled: True}
+  - {code: "sram", memory: "sram", repetitions: 16, strInstr: "str.w", addCount: 1, cache_enabled: True}
+  - {code: "sram", memory: "sram", repetitions: 16, strInstr: "str.w", addCount: 2, cache_enabled: True}
+  - {code: "sram", memory: "sram", repetitions: 16, strInstr: "str.w", addCount: 3, cache_enabled: True}
+  - {code: "sram", memory: "sram", repetitions: 16, strInstr: "str.w", addCount: 4, cache_enabled: True}

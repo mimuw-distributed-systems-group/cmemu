@@ -1,0 +1,34 @@
+reason: branches to sram don't work fully
+ignored:
+- symbols: ["times"]
+  configurations:
+  - { codePlaces: [gpram, sram], lbEn: true}
+  - { codePlaces: [flash, sram], lbEn: true}
+  - { codePlaces: [sram, gpram], lbEn: true }
+  - { codePlaces: [sram, flash], lbEn: true}
+  - { codePlaces: [sram, gpram, flash], lbEn: true}
+  - { codePlaces: [gpram, sram, flash], lbEn: true}
+  - { codePlaces: [gpram, flash, sram], lbEn: true}
+  - { codePlaces: [flash, gpram, sram], lbEn: true }
+  - { codePlaces: [sram, flash, gpram], lbEn: true }
+  - { codePlaces: [gpram, sram, gpram, flash, gpram, sram, flash, sram], lbEn: false }
+  - { codePlaces: [gpram, sram, flash, gpram, gpram, sram, flash, flash], lbEn: false}
+  - { codePlaces: [sram, sram, sram, sram, sram, flash, gpram, sram], lbEn: false }
+  - { codePlaces: [flash, gpram, gpram, flash, flash, sram, sram, flash], lbEn: false}
+  - { codePlaces: [gpram, flash, flash, flash, gpram, flash, sram, sram], lbEn: false}
+  - { codePlaces: [sram, sram, flash, sram, gpram, sram, flash, gpram], lbEn: false}
+  - { codePlaces: [flash, flash, flash, sram, gpram, gpram, flash], lbEn: false}
+  - { codePlaces: [gpram, sram, gpram, sram, gpram, sram, flash, flash], lbEn: false}
+  - { codePlaces: [flash, flash, sram, flash, sram, sram, gpram, sram], lbEn: false}
+  - { codePlaces: [gpram, sram, flash, gpram, gpram, sram, flash, flash], lbEn: true}
+  - { codePlaces: [flash, gpram, gpram, flash, flash, sram, sram, flash], lbEn: true}
+  - { codePlaces: [gpram, flash, flash, flash, gpram, flash, sram, sram], lbEn: true}
+  - { codePlaces: [sram, sram, flash, sram, gpram, sram, flash, gpram], lbEn: true}
+  - { codePlaces: [flash, flash, flash, sram, gpram, gpram, flash], lbEn: true}
+  - { codePlaces: [gpram, sram, gpram, sram, gpram, sram, flash, flash], lbEn: true}
+  - { codePlaces: [flash, flash, sram, flash, sram, sram, gpram, sram], lbEn: true}
+  - { codePlaces: [flash, gpram, gpram, sram, flash, gpram, sram, gpram], lbEn: false }
+  - { codePlaces: [gpram, sram, gpram, flash, gpram, sram, flash, sram], lbEn: true }
+  - { codePlaces: [sram, sram, sram, sram, sram, flash, gpram, sram], lbEn: true }
+  - { codePlaces: [flash, gpram, gpram, sram, flash, gpram, sram, gpram], lbEn: true }
+

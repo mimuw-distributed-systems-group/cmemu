@@ -1,0 +1,189 @@
+use cmemu_common::Address;
+
+pub const DISPLAY: &str = "STAT";
+pub const OFFSET: u32 = 0x0;
+/// 0x40034000
+pub const ADDR: Address = super::ADDR.offset(OFFSET);
+pub const BIT_SIZE: u8 = 32;
+pub const RESET_VALUE: u32 = 0x00000000;
+pub const RESET_MASK: u32 = 0xffffffff;
+/// Icode/Dcode flash line buffer status
+///
+///
+///
+/// 0: Enabled or in transition to disabled
+///
+/// 1: Disabled and flushed
+pub mod IDCODE_LB_DIS {
+    #![allow(clippy::cast_lossless)]
+    use core::ops::RangeInclusive;
+    pub const BIT_RANGE: RangeInclusive<u8> = 5..=5;
+    pub const BIT_MASK: u32 = 0x00000020;
+    pub const BIT_WIDTH: u8 = 1;
+    pub const RESET_VALUE: u32 = 0x0;
+    pub const WRITABLE: bool = false;
+}
+/// Sysbus flash line buffer control
+///
+///
+///
+/// 0: Enabled or in transition to disabled
+///
+/// 1: Disabled and flushed
+pub mod SYSBUS_LB_DIS {
+    #![allow(clippy::cast_lossless)]
+    use core::ops::RangeInclusive;
+    pub const BIT_RANGE: RangeInclusive<u8> = 4..=4;
+    pub const BIT_MASK: u32 = 0x00000010;
+    pub const BIT_WIDTH: u8 = 1;
+    pub const RESET_VALUE: u32 = 0x0;
+    pub const WRITABLE: bool = false;
+}
+/// VIMS mode change status
+///
+///
+///
+/// 0: VIMS is in the mode defined by MODE
+///
+/// 1: VIMS is in the process of changing to the mode given in CTL.MODE
+pub mod MODE_CHANGING {
+    #![allow(clippy::cast_lossless)]
+    use core::ops::RangeInclusive;
+    pub const BIT_RANGE: RangeInclusive<u8> = 3..=3;
+    pub const BIT_MASK: u32 = 0x00000008;
+    pub const BIT_WIDTH: u8 = 1;
+    pub const RESET_VALUE: u32 = 0x0;
+    pub const WRITABLE: bool = false;
+}
+/// This bit is set when invalidation of the cache memory is active / ongoing
+pub mod INV {
+    #![allow(clippy::cast_lossless)]
+    use core::ops::RangeInclusive;
+    pub const BIT_RANGE: RangeInclusive<u8> = 2..=2;
+    pub const BIT_MASK: u32 = 0x00000004;
+    pub const BIT_WIDTH: u8 = 1;
+    pub const RESET_VALUE: u32 = 0x0;
+    pub const WRITABLE: bool = false;
+}
+/// Current VIMS mode
+pub mod MODE {
+    #![allow(clippy::cast_lossless)]
+    use core::ops::RangeInclusive;
+    pub const BIT_RANGE: RangeInclusive<u8> = 0..=1;
+    pub const BIT_MASK: u32 = 0x00000003;
+    pub const BIT_WIDTH: u8 = 2;
+    pub const RESET_VALUE: u32 = 0x0;
+    pub const WRITABLE: bool = false;
+    pub use self::Named as E;
+    pub mod Named {
+        /// VIMS Off mode
+        pub const OFF: u32 = 3;
+        /// VIMS Cache mode
+        pub const CACHE: u32 = 1;
+        /// VIMS GPRAM mode
+        pub const GPRAM: u32 = 0;
+    }
+}
+
+pub use HwRegisterImpl::Register;
+
+pub mod HwRegisterImpl {
+    #![allow(
+        clippy::cast_lossless,
+        clippy::identity_op,
+        clippy::must_use_candidate,
+        clippy::new_without_default,
+        clippy::no_effect,
+        clippy::no_effect_underscore_binding,
+        clippy::return_self_not_must_use,
+        unused_braces
+    )]
+    use cmemu_common::HwRegister;
+    use log::warn;
+    use modular_bitfield::prelude::*;
+
+    #[derive(Clone, Copy, Debug)]
+    pub struct Register {
+        content: Bitfields,
+    }
+
+    #[repr(u32)]
+    #[bitfield]
+    #[derive(Clone, Copy, Debug)]
+    pub struct Bitfields {
+        pub MODE: B2,
+        pub INV: B1,
+        pub MODE_CHANGING: B1,
+        pub SYSBUS_LB_DIS: B1,
+        pub IDCODE_LB_DIS: B1,
+        pub reserved_6_32: B26,
+    }
+
+    impl HwRegister for Register {
+        const RESERVED_BITS_MASK: u32 = 0xffffffc0;
+        const READ_ONLY_BITS_MASK: u32 = 0x0000003f;
+        const WRITE_ONLY_BITS_MASK: u32 = 0x00000000;
+
+        fn read(&self) -> u32 {
+            u32::from(self.content)
+        }
+
+        fn mutate(&mut self, word: u32) {
+            let old_val: u32 = self.read();
+            let mut new_val: u32 = word;
+
+            // Check if modifies reserved bits
+            if old_val & Self::RESERVED_BITS_MASK != new_val & Self::RESERVED_BITS_MASK {
+                warn!(target: "cc2650_constants::VIMS::STAT", "Changing reserved bits of {}", super::DISPLAY);
+            }
+            // Check if modifies read only bits
+            if old_val & Self::READ_ONLY_BITS_MASK != new_val & Self::READ_ONLY_BITS_MASK {
+                warn!(
+                    target: "cc2650_constants::VIMS::STAT",
+                    "Changing read only bits of {}, write to read only bits is ignored",
+                    super::DISPLAY
+                );
+                // replace read only bits in `val` with original value in `self.0`
+                new_val =
+                    (new_val & !Self::READ_ONLY_BITS_MASK) | (old_val & Self::READ_ONLY_BITS_MASK);
+            }
+            self.content = Bitfields::from(new_val);
+        }
+    }
+
+    impl Register {
+        pub fn new() -> Self {
+            Self {
+                content: Bitfields::from(super::RESET_VALUE),
+            }
+        }
+
+        pub fn bitfields(self) -> Bitfields {
+            self.content
+        }
+
+        pub fn mut_bitfields(&mut self) -> &mut Bitfields {
+            &mut self.content
+        }
+
+        pub fn mutate_copy(&self, mutator: fn(Bitfields) -> Bitfields) -> Self {
+            Self {
+                content: mutator(self.content),
+            }
+        }
+    }
+
+    impl From<u32> for Register {
+        fn from(item: u32) -> Self {
+            Self {
+                content: Bitfields::from(item),
+            }
+        }
+    }
+
+    impl From<Register> for u32 {
+        fn from(item: Register) -> Self {
+            Self::from(item.content)
+        }
+    }
+}

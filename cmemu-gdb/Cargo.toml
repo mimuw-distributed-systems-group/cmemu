@@ -1,0 +1,49 @@
+[package]
+name = "cmemu-gdb"
+version = "0.1.0"
+edition = "2024"
+description = "Enables inspecting with gdb execution emulated by CMEmu (cmemu-lib)."
+homepage = "https://mimuw-distributed-systems-group.github.io/cmemu/"
+repository = "https://github.com/mimuw-distributed-systems-group/cmemu"
+license = "MIT OR Apache-2.0"
+keywords = ["CMEmu", "gdb"]
+categories = ["emulators"]
+
+[features]
+default = ["cdl"]
+
+cdl = [
+    "cmemu-lib/cycle-debug-logger",
+    "cmemu-flash-test-lib?/cycle-debug-logger",
+]
+
+# Support for cmemu-flash-test-lib
+flash-test-lib = [
+    "dep:cmemu-flash-test-lib",
+    "dep:cmemu-elf-loader",
+    "cmemu-elf-loader/builder",
+    "cmemu-lib/pretty_log",
+]
+
+[dependencies]
+cmemu-lib = { path = "../cmemu-lib/" }
+cc2650-constants = { path = "../cc2650-constants", default-features = false, features = ["register-names"] }
+cmemu-flash-test-lib = { path = "../cmemu-flash-test-lib/", default-features = false, optional = true }
+cmemu-elf-loader = { path = "../cmemu-elf-loader/", default-features = false, optional = true }
+log = "0.4"
+flexi_logger = { version = "0.30.1", features = ["specfile_without_notification"] }
+clap = { version = "4.5", features = ["derive"] }
+shlex = "1.3.0"
+gdbstub = { version = "0.7.5", default-features = false, features = ["std"] }
+gdbstub_arch = "0.3.1"
+# These are needed for handling "--gdb-here" - hide them behind a flag?
+tempfile = "3.19"
+# Support for Ctrl-C
+signal-hook = { version = "0.3.17", default-features = false }
+
+# For allowing attaching debugger by PID
+[target.'cfg(target_os = "linux")'.dependencies]
+libc = "0.2.171"
+
+[lints]
+workspace = true

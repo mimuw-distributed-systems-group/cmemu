@@ -1,0 +1,14 @@
+# Run with false before making a release
+avoid-breaking-exported-api = true
+
+absolute-paths-max-segments = 3  #  max is eg. std::u64::MAX
+
+# Debug in tests (cargo::restrictions):
+allow-print-in-tests = true
+allow-dbg-in-tests = true
+
+###############
+# Cargo section
+###############
+# We cannot do much about it: syn@1 is used by modular_bitfields, num_enum, and static_init
+allowed-duplicate-crates = ["syn"]

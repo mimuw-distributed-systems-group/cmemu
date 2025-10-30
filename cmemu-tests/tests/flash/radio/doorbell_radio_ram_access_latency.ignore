@@ -1,0 +1,16 @@
+reason: Radio is not yet implemented
+ignored:
+- symbols: ["times"]
+  configurations:
+  - { code: gpram, base: ram, ldrInstr: ldr.w }
+  - { code: gpram, base: ram, ldrInstr: ldr.n }
+  - { code: gpram, base: dbell, ldrInstr: ldr.w }
+  - { code: gpram, base: dbell, ldrInstr: ldr.n }
+  - { code: sram, base: ram, ldrInstr: ldr.w }
+  - { code: sram, base: ram, ldrInstr: ldr.n }
+  - { code: sram, base: dbell, ldrInstr: ldr.w }
+  - { code: sram, base: dbell, ldrInstr: ldr.n }
+  - { code: flash, base: ram, ldrInstr: ldr.w }
+  - { code: flash, base: ram, ldrInstr: ldr.n }
+  - { code: flash, base: dbell, ldrInstr: ldr.w }
+  - { code: flash, base: dbell, ldrInstr: ldr.n }

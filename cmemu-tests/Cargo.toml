@@ -1,0 +1,61 @@
+[package]
+name = "cmemu-tests"
+version = "0.1.0"
+edition = "2024"
+description = "Tests of CMEmu (cmemu-lib)."
+homepage = "https://mimuw-distributed-systems-group.github.io/cmemu/"
+repository = "https://github.com/mimuw-distributed-systems-group/cmemu"
+license = "MIT OR Apache-2.0"
+keywords = ["CMEmu", "testing", "flash tests"]
+categories = ["emulators"]
+
+# ------ Consult `Cargo dependencies` in `GUIDELINES.md` before changing. ------
+[features]
+# Verifies that debug-assertions and overflow-checks are enabled during tests.
+test-debug-mode-checks = []
+# Verifies that enabling CDL does not cause an emulator crash during tests.
+test-cdl-generates-correctly = ["cmemu-flash-test-lib/cycle-debug-logger"]
+# Makes large tests to be run with `cargo test`. Otherwise they are marked as ignored.
+include-large-tests = []
+# Makes no_allocations test panic and return a stack trace upon any allocation after initialization.
+# Use this to quickly find an offending code.
+allocations-panic = []
+soc-cc2652 = ["cmemu-lib/soc-cc2652"]
+soc-stm32f100rbt6 = ["cmemu-lib/soc-stm32f100rbt6"]
+
+[dev-dependencies]
+rstest = "0.25.0"
+test-log = "0.2"
+log = "0.4.26"
+anyhow = "1.0"
+cmemu-flash-test-lib = { path = "../cmemu-flash-test-lib/" }
+cmemu-lib = { path = "../cmemu-lib/" }
+rand = { version = "0.9", features = ["alloc"] }
+
+# Elf tests deps
+cmemu = { path = "../cmemu/", features = ["elf"] }
+assert_cmd = "2.0.17"
+predicates = "3.1.1"
+tempfile = { version = "3.7.0" }
+clap = { version = "4.5", features = ["derive"] }
+
+# Cargo binary dependencies are unstable (-Z bindeps)
+# We're using a binary target, baceuse it is always built with tests.
+# Example target would use dev-dependencies, but these are not guaranteed to be up to date,
+# for instance, when using only the --test target.
+[[bin]]
+name = "cmemu-bin-dep"
+path = "cmemu-bin-dep.rs"
+
+[dependencies]
+cmemu = { path = "../cmemu/", features = ["elf"] }
+clap = { version = "4.5", features = ["derive"] }
+
+
+[build-dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_yaml = "0.9"
+anyhow = "1.0"
+
+[lints]
+workspace = true

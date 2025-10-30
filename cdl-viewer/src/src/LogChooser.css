@@ -1,0 +1,12 @@
+.api-explainer {
+  margin-top: 1em;
+}
+
+.api-explainer > * {
+  margin-left: 1em;
+}
+
+.api-explainer > summary {
+  margin-left: inherit;
+  margin-bottom: 1em;
+}

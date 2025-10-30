@@ -1,0 +1,5 @@
+reason: The test is not deterministic and requires ROM
+ignored:
+- symbols: [times]
+  configurations:
+    - { code: "gpram", lbEn: true }

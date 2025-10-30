@@ -1,0 +1,231 @@
+.meta:
+  desc: |
+    This is a file to scope hyperparameters of the code in one place.
+
+cm_hyp:
+  .confeature:
+    doc: Hyperparameters of the model.
+    mode_cap: comptime
+    default_mode: anytime
+
+  spec_fetch:
+    type: namespace
+    ns:
+      .confeature:
+        doc: Configuration for various speculative fetching options
+      postponing_skipped_lsu:
+        type: bool
+        default: false
+        mode: comptime
+      postponing_skipped_alu:
+        type: bool
+        default: false # no data?
+      postponing_skipped_branch:
+        type: bool
+      #    default: false # no data?
+      skipped_lsucnt:
+        type: bool
+        default: false
+        mode: comptime
+      skipped_causes_phony_multicycle:
+        type: bool
+        default: true # tmp
+      # If not, then maybe STR (reg)
+      skipped_nop_eater:
+        type: bool
+      #    default: true # TODO: test on larger set
+      can_spec_disregards_folded:
+        type: bool
+        default: true
+
+  shadow_piq:
+    type: namespace
+    ns:
+      .confeature:
+        doc: Experiments with simulating a ring-buffer with dirty values (what makes something look like an IT)
+        default_mode: comptime
+
+      enabled: true
+
+
+  busmatrix:
+    type: namespace
+    ns:
+      system_wb_denies_ldr_after_str:
+        type: bool
+        default: true
+        mode: comptime
+
+  # 75% [refers this solution
+  bx_lr:
+    type: namespace
+    ns:
+      .confeature:
+        doc: For BX LR errata
+        default_mode: comptime
+
+      flag_clearing_mode:
+        type: enum
+        default: MulticycleNop
+        variants:
+          - Always
+          - MulticycleNop
+      skipped_set_flag:
+        type: bool
+        default: false
+      bl_set_flag:
+        type: bool
+        default: false
+
+  add_pc_uses_agu_r0:
+    doc: ADD PC, RX behaves as it needed R0 for AGU
+    type: bool
+    default: true
+    mode: comptime
+
+  ablation:
+    type: namespace
+    ns:
+      .confeature:
+        doc: Ablation study for the paper. Do not use.
+        default_mode: comptime
+        mode_cap: comptime
+      umull_mla_mla:
+        doc: Handle "UMULL; MLA; MLA" pipelining special case. Used for ablation only.
+        type: bool
+        default: true
+      no_ldr_post_str:
+        doc: Don't pipeline loads after stores. Used for ablation only.
+        type: bool
+        default: false
+      no_piq_overcommit:
+        doc: Don't handle "speculative fetching", that is expecting a single-cycle instruction to free a fetch slot.
+        type: bool
+        default: false
+
+cdl:
+  .confeature:
+    doc: |
+      Configurable for collected logs verbosity by the CDL.
+    mode_cap: comptime # We want it to constant-optimize
+    default_mode: fixed
+
+  # Gate
+  cycle-debug-logger: feature
+
+  black_box_capacity:
+    doc: Capacity in cycles of the ring-buffer recording
+    mode: comptime
+    type: int
+    default: 1000
+    optional: false
+    range:
+      start: 0
+      end: 48000000
+
+  black_box_auto:
+    doc: Automatically dump black-box on unwinding
+    mode: anytime
+    type: bool
+    default: false
+
+  log_literals:
+    doc: Include the L:DA & L:DD events in CDL. May bloat the recorded addresses a bit.
+    type: enum
+    default: Mem
+    variants: [ None, Mem, All ]
+
+  log_shadow_piq: false
+
+cdl_ahb_trace:
+  .confeature:
+    doc: |
+      Configurable for runtime-generated logs verbosity from cdl-ahb-trace
+      Doesn't influence the logs put into CDL file (they use a separate cycle-level mechanism)
+    mode_cap: comptime # We want it to constant-optimize
+    default_mode: fixed
+
+  # Gate
+  cdl-ahb-trace: feature
+
+  display_status:
+    doc: This will display the destination who terminated the message in the returning tag.
+    type: bool
+    default: true
+
+  display_trace:
+    doc: |
+      This will enable tracing_stamps -- each pass over `bridge_ports!` will put a record, and a message wires on Debug
+      will show the whole trace (it may be lengthy, but it is a simpler alternative to using a VCD viewer, especially in tests)
+    type: bool
+    default: false
+
+
+  # TODO: these below are meaningful only when tracing_stamps is enabled
+
+  display_dest:
+    doc: When showing a full trace, it will display a pair (SRC->DEST) for each hop on record.
+    type: bool
+    default: true
+
+  display_time:
+    doc: When showing a full trace, it will include the simulated time mark for each hop on record.
+    type: bool
+    default: true
+
+  use_type_name:
+    doc: Show typenames of ports in the full trace instead of their AhbPortConfig::TAG
+    type: bool
+    default: false
+
+  trace_clones:
+    doc: Record calls to `.clone()` -- when tracing_stamps, this marks the position in the history, otherwise just count
+    type: bool
+    default: true
+
+  always_trace_stamps:
+    doc: Make the AHB messages always carry the visited nodes (i.e., to be present in panics)
+    type: bool
+    default: false
+
+cm_logs:
+  .confeature:
+    doc: |
+      Statically disable/enable selected logs from the `log` crate ecosystem. 
+      Checking if a log is enabled and ready to dump requires some non-trivial machinery,
+      and they cannot be statically disabled on a per-target basis.
+      Therefore, wrap them with these confeatures.
+    default_mode: comptime
+
+  clock_tree_traces: false
+  disableable_impl: false
+  ahb_trace:
+    doc: |
+      Generate AHB logs from `bridge_ports!` (under `::ahb_trace`).
+      These logs may be enriched as described in `cdl_ahb_trace` section.
+    type: bool
+    default: true
+
+println_traces:
+  .confeature:
+    doc: |
+      Extra traces output on stdout. Envisioned as an alternative to extracting info from CDL or from standard logs
+      when only selected info is required and a high emulation speed & small output are a priority.
+    mode_cap: comptime # We want all println traces we don't turn on explicitly to be optimized out.
+    default_mode: comptime
+
+  decoded_instructions:
+    doc: Log full names and lengths of decoded instructions.
+    type: bool
+    default: false
+
+cache:
+  .confeature:
+    doc: Cache configuration
+    mode_cap: comptime
+    default_mode: comptime
+
+  naive_mode:
+    doc: Disables cycle-level special cases (such as the special case of TAG prefetch not being used in specific cycles)
+    type: bool
+    default: false

@@ -1,0 +1,11 @@
+reason: >
+  The timing of interrupts is out of scope right now.
+ignored:
+- symbols: ["times", "exccnts"]
+  configurations:
+  - { handler_exit_instr: "push.w {lr}; pop.w {pc}" }
+  - { handler_exit_instr: "mov.w r1, lr; push.w {r1, lr}; pop.w {r1, pc}" }
+  - { handler_exit_instr: "mov.w r2, lr; ldr.w r1, =cells; stm.w r1, {r2, lr}; ldm.w r1, {r2, pc}" }
+  - { handler_exit_instr: "ldr.w r1, =cells; str.w lr, [r1]; ldr.w pc, [r1]" }
+  - { handler_exit_instr: "bx.n lr" }
+  - { handler_exit_instr: "mov.n r1, lr; bx.n r1" }

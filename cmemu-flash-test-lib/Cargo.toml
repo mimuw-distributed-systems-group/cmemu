@@ -1,0 +1,33 @@
+[package]
+name = "cmemu-flash-test-lib"
+version = "0.1.0"
+edition = "2024"
+description = "Runs flash test of CMEmu (cmemu-lib)."
+homepage = "https://mimuw-distributed-systems-group.github.io/cmemu/"
+repository = "https://github.com/mimuw-distributed-systems-group/cmemu"
+license = "MIT OR Apache-2.0"
+keywords = ["CMEmu", "flash tests", "testing"]
+categories = ["emulators"]
+
+[features]
+default = []
+
+# Enables Cycle Debug Logger (abbr. CDL). Opting out makes emulator faster.
+cycle-debug-logger = ["cmemu-lib/cycle-debug-logger"]
+
+# ------ Consult `Cargo dependencies` in `GUIDELINES.md` before changing. ------
+[dependencies]
+cmemu-lib = { path = "../cmemu-lib/", default-features = false, features = ["flash-test-lib"] }
+anyhow = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+rmp-serde = "1.3"
+zstd = "0.11.2"
+zip = "2.4"
+tar = "0.4"
+sha2 = "0.10.6"
+serde_bytes = "0.11"
+humantime = "2.1"
+clap = { version = "4.1", features = ["derive"] }
+
+[lints]
+workspace = true

@@ -1,0 +1,13 @@
+reason: Problems with memory transfers and conflicts
+ignored:
+- symbols: ["times"]
+  configurations:
+  - {code: sram, memory: sram, lbEn: false, target: reg, size: b, width: w}
+  - {code: sram, memory: sram, lbEn: false, target: reg, size: b, width: n}
+  - {code: sram, memory: sram, lbEn: false, target: imm, size: b, width: n}
+  - {code: sram, memory: sram, lbEn: false, target: imm, size: b, width: w}
+
+  - {code: sram, memory: sram, lbEn: false, target: imm, size: h, width: n}
+  - {code: sram, memory: sram, lbEn: false, target: imm, size: h, width: w}
+  - {code: sram, memory: sram, lbEn: false, target: reg, size: h, width: w}
+  - {code: sram, memory: sram, lbEn: false, target: reg, size: h, width: n}

@@ -1,0 +1,16 @@
+reason: Data in sram
+ignored:
+- symbols: [times, lsucnts]
+  configurations:
+    - {stall_pos: 0, "code": "sram", lbEn: true, xcycles: [0,], paddingtons: [0, 1], }
+    - {stall_pos: 0, "code": "sram", lbEn: true, xcycles: [0,], paddingtons: [2, 3], }
+    - {stall_pos: 0, "code": "sram", lbEn: true, xcycles: [2,], paddingtons: [0, 1], }
+    - {stall_pos: 0, "code": "sram", lbEn: true, xcycles: [2,], paddingtons: [2, 3], }
+    - {stall_pos: 1, "code": "sram", lbEn: true, xcycles: [0,], paddingtons: [0, 1], }
+    - {stall_pos: 1, "code": "sram", lbEn: true, xcycles: [0,], paddingtons: [2, 3], }
+    - {stall_pos: 1, "code": "sram", lbEn: true, xcycles: [2,], paddingtons: [0, 1], }
+    - {stall_pos: 1, "code": "sram", lbEn: true, xcycles: [2,], paddingtons: [2, 3], }
+    - {stall_pos: 2, "code": "sram", lbEn: true, xcycles: [0,], paddingtons: [0, 1], }
+    - {stall_pos: 2, "code": "sram", lbEn: true, xcycles: [0,], paddingtons: [2, 3], }
+    - {stall_pos: 2, "code": "sram", lbEn: true, xcycles: [2,], paddingtons: [0, 1], }
+    - {stall_pos: 2, "code": "sram", lbEn: true, xcycles: [2,], paddingtons: [2, 3], }

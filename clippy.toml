@@ -1,0 +1,27 @@
+# Run with false before making a release
+avoid-breaking-exported-api = true
+
+absolute-paths-max-segments = 3  #  max is eg. std::u64::MAX
+
+# No disallowed by default
+# Use table format like: { path = "serde::Serialize", reason = "no serializing" } with "replacement" key if possible.
+# disallowed-macros = []
+
+# Do not suggest ticks for these names:
+doc-valid-idents = ["CMEmu", "SoC", "CherryMote", "CLocK", ".."]
+
+# This lint is usually over-conservative, as it considers bools to represent a state machine, not a configuration
+max-struct-bools = 5
+
+# We often use aligned address up to 4 (x & 3 == 0), but consider disabling this lint altogether
+verbose-bit-mask-threshold = 4
+
+# Debug in tests (cargo::restrictions):
+allow-print-in-tests = true
+allow-dbg-in-tests = true
+
+###############
+# Cargo section
+###############
+# We cannot do much about it: syn@1 is used by modular_bitfields, num_enum, and static_init
+allowed-duplicate-crates = ["syn"]

@@ -1,0 +1,5 @@
+reason: Problems with memory transfers and conflicts
+ignored:
+- symbols: ["times"]
+  configurations:
+  - {code: sram, lbEn: True, memory: sram, cache_enabled: True}

@@ -1,0 +1,8 @@
+reason: We need better timings for STR (imm)
+ignored:
+- symbols: ["times"]
+  configurations:
+  - {code: sram, memory: sram, lbEn: True, repetitions: 31, encoding: T1, cache_enabled: True}
+  - {code: sram, memory: sram, lbEn: True, repetitions: 31, encoding: T2, cache_enabled: True}
+  - {code: sram, memory: sram, lbEn: True, repetitions: 24, encoding: T3, cache_enabled: True}
+  - {code: sram, memory: sram, lbEn: True, repetitions: 24, encoding: T4, cache_enabled: True}

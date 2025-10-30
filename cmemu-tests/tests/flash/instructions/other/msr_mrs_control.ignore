@@ -1,0 +1,27 @@
+reason: Wrong timing on mrs instructions. Moreover, STIR is incorrectly implemented.
+ignored:
+#- symbols: ["read_times", "write_times"]
+#  configurations:
+#  - { code: "gpram", lbEn: true, new_control_values: [0,2,4,8,16] }
+#  - { code: "flash", lbEn: true, new_control_values: [0,2,4,8,16] }
+- symbols:
+  - write_times
+  - read_times
+  - results
+  - control_before_execution
+  - control_mutable_after_execution
+  configurations:
+  - { code: "gpram", lbEn: true, new_control_values: [0,2,4,8,16] }
+  - { code: "sram", lbEn: true, new_control_values: [0,2,4,8,16] }
+  - { code: "flash", lbEn: true, new_control_values: [0,2,4,8,16] }
+  - { code: "flash", lbEn: false, new_control_values: [0,2,4,8,16] }
+
+  - { code: "gpram", lbEn: true, new_control_values: [1] }
+  - { code: "sram", lbEn: true, new_control_values: [1] }
+  - { code: "flash", lbEn: true, new_control_values: [1] }
+  - { code: "flash", lbEn: false, new_control_values: [1] }
+
+  - { code: "gpram", lbEn: true, new_control_values: [3] }
+  - { code: "sram", lbEn: true, new_control_values: [3] }
+  - { code: "flash", lbEn: true, new_control_values: [3] }
+  - { code: "flash", lbEn: false, new_control_values: [3] }

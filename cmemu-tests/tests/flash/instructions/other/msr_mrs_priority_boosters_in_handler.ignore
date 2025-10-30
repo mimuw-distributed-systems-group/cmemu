@@ -1,0 +1,8 @@
+reason: Interrupts are not working for now
+ignored:
+- symbols: ["results", "times"]
+  configurations:
+    - { reg: "primask" }
+    - { reg: "faultmask" }
+    - { reg: "basepri" }
+    - { reg: "basepri_max" }

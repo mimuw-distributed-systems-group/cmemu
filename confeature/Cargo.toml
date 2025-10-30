@@ -1,0 +1,133 @@
+[package]
+name = "confeature"
+version = "0.1.0"
+authors = ["Maciej Matraszek <m.matraszek@mimuw.edu.pl>"]
+edition = "2024"
+readme = "README.md"
+description = "Confeature is a flexible configuration/(hyper-)parametrisation utility for your high-performance Rust code, seamlessly bridging compile-time and run-time constants."
+keywords = ["config", "performance", "static", "build", "cfg"]
+categories = ["config", "development-tools::build-utils", "rust-patterns"]
+license = "MIT OR Apache-2.0 OR MPL-2.0"
+repository = "https://github.com/matrach/confeature"
+autobins = false # We want to specify deps on main bin
+
+
+[badges]
+maintenance = { status = "experimental" }
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[features]
+default = []
+
+comptime = [
+    # Build script injections and evaluation
+    "dep:cfg-expr", "dep:cfg_aliases",
+    # Parsing of configuration
+    "dep:serde", "serde/derive", "dep:serde_yaml", "dep:serde_plain", "dep:indexmap",
+    # Code generation
+    "dep:quote", "dep:syn", "syn/full", "syn/parsing", "syn/printing", "dep:prettyplease", "dep:convert_case",
+]
+runtime = ["dep:static_init", "dep:konst"]
+runtime-parse = ["dep:serde", "dep:serde_yaml", "dep:indexmap"]
+binary = ["comptime", "dep:cargo_toml", "dep:lexopt"]
+
+# Kind of an easter-egg
+sick-of-emojis = []
+
+[[bin]]
+name = "confeature"
+path = "src/main.rs"
+required-features = ["binary"]
+
+[dependencies]
+# Comptime for build script
+cfg-expr = { version = "0.19.0", optional = true }
+cfg_aliases = { version = "0.2.1", optional = true }
+serde = { version = "1.0", features = ["derive"], optional = true }
+serde_yaml = { version = "0.9", optional = true }
+serde_plain = { version = "1.0.2", optional = true }
+indexmap = { version = "2.0.2", features = ["serde"], optional = true } # Map with order
+
+quote = { version = "1.0", optional = true }
+syn = { version = "2.0", default-features = false, features = ["printing", "parsing", "full"], optional = true }
+prettyplease = { version = "0.2.15", optional = true }
+convert_case = { version = "0.8.0", optional = true }
+
+# Only for standalone binary
+cargo_toml = { version = "0.22.1", optional = true }
+lexopt = { version = "0.3.0", optional = true }
+
+# Runtime for the resulting generated code
+konst = { version = "0.3.6", optional = true, features = ["parsing"] }
+static_init = { version = "1.0.3", optional = true }
+
+[lints.rust]
+# Consider enabling more
+missing_debug_implementations = "warn"
+#missing_docs = "warn"
+non_ascii_idents = "warn"
+impl_trait_redundant_captures = "warn"
+let_underscore_drop = "warn"
+unreachable_pub = "warn"
+unused_lifetimes = "warn"
+unsafe_code = "warn" # confeature uses #[no_mangle/export_name/link_section]
+
+[lints.rustdoc]
+# Doc lints. Consider denying more in the future: https://doc.rust-lang.org/rustdoc/lints.html.
+broken_intra_doc_links = "deny"
+invalid_codeblock_attributes = "deny"
+
+[lints.clippy]
+# Lint groups go first
+all = { level = "warn", priority = -3 }
+#pedantic = { level = "warn", priority = -2 }
+cargo = { level = "warn", priority = -1 }
+
+# Lints from pedantic
+# ---->
+#missing_panics_doc = "allow"  # Remove the allow when we enable the main "missing_docs" lint
+#missing_errors_doc = "allow"  # Remove the allow when we enable the main "missing_docs" lint
+# Let's agree to disagree abount suggesting Type::default() instead of Default::default().
+# If I wanted a type name, I'd rather use Type::new().
+default_trait_access = "allow"
+
+needless_pass_by_value = "allow"  # this is a semantic statement
+redundant_closure_for_method_calls = "allow" # Check for it sometimes, but mostly less readable
+inline_always = "allow"
+if_not_else = "allow" # This is too pedantic over negatives that readability if provides
+redundant_else = "allow" # better readability
+struct_field_names = "allow"
+# <----
+
+# Lints from nursery (as of 1.89)
+# ---->
+use_self = "warn"
+useless_let_if_seq = "warn"
+# <----
+
+# Restrictions from clippy::restrictions (must be cherry-picked!)
+# Try sorting the list alphabetically, with exceptions of lints that are very similar.
+# Last update revision: 1.84, you may want to screen new lints for inclusion!
+# ---->
+absolute_paths = "warn" # too long abs paths in non-macro code,
+big_endian_bytes = "warn" # CM is little endian by default, oher casts are probably a bug!
+host_endian_bytes = "warn" # CM is little endian by default, other casts are probably a bug!
+dbg_macro = "warn" # Don't leave it! (allowed in tests).
+decimal_literal_representation = "warn" # Prefer hex for large round decimals.
+error_impl_error = "warn" # Don't just name the error an `Error`.
+exhaustive_enums = "warn" # Missing #[non_exhaustive] is a stability commitment. We prefer whitelisting.
+exhaustive_structs = "warn" # Missing #[non_exhaustive] is a stability commitment.
+fn_to_numeric_cast_any = "warn" # Doing `func as usize` instead of `func() as usize`.
+if_then_some_else_none = "warn" # personal preference, uncomment to inspect the code
+precedence_bits = "warn" # Require parentheses between &/| and bit shifts >>/<<
+rc_buffer = "warn" # Strongly suggest using the weaker type.
+rc_mutex = "warn" # Looks like mixing Rc/Mutex instead of Arc/RefCell.
+redundant_test_prefix = "warn" # Don't name test functions "test_"
+same_name_method = "warn" # Same method name from trait and as inherent.
+str_to_string = "warn" # Require using "str".to_owned() instead of .to_string()
+tests_outside_test_module = "warn" # Must put tests into #[cfg(test)]
+too_long_first_doc_paragraph = "warn"
+todo = "warn"
+unused_result_ok = "warn"
+# unused_trait_names = "warn" # Require using 'use ...::Trait as _' if it is not used by name
+# <----

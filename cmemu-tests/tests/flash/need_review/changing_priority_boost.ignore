@@ -1,0 +1,5 @@
+reason: The timing of interrupts is out of scope right now.
+ignored:
+- symbols: ["times", "exccnts"]
+  configurations:
+    - { priority_boosting_reg: "basepri", values: ['0x0', '0x0', '0x1', '0x2', '0x4', '0x8', '0x10', '0x20', '0x40', '0x80'] }

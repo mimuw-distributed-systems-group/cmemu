@@ -1,0 +1,19 @@
+reason: bx<cc> lr may do speculative fetch to a random address, memory returns ERR, but we don't support it
+ignored:
+-
+ symbols:
+   - counters
+   - registers
+   - stack
+   - safeSpaceSram
+   - safeSpaceGpramSram
+ configurations:
+   - code_memory: gpram
+     cache_en: false
+     lb_en: true
+     wb_en: false
+     jump_start: label16
+     jump_label16: label31
+     jump_label31: code_end
+     code_end: code_end
+     space_mod: 4

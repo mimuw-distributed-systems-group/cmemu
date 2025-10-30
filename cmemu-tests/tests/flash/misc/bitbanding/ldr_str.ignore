@@ -1,0 +1,13 @@
+reason: >
+    Current bitbanding is mocked up.
+ignored:
+- symbols: ["times", "lsucnts"]
+  configurations: 
+  - { code: "gpram", lbEn: True, accessInstr: "str.w" }
+  - {'code': 'gpram', 'lbEn': True, 'accessInstr': 'ldr.w'}
+  - { code: "sram", lbEn: True, accessInstr: "ldr.w" }
+  - { code: "sram", lbEn: True, accessInstr: "str.w" }
+  - {'code': 'flash', 'lbEn': True, 'accessInstr': 'ldr.w'}
+  - {'code': 'flash', 'lbEn': False, 'accessInstr': 'ldr.w'}
+  - { code: "flash", lbEn: True, accessInstr: "str.w" }
+  - { code: "flash", lbEn: False, accessInstr: "str.w" }

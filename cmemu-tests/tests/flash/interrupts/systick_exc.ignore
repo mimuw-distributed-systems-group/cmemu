@@ -1,0 +1,11 @@
+reason: >
+  The timing of interrupts is out of scope right now. "results" depend on this property.
+ignored:
+- symbols: ["times", "exccnts", "lsucnts", "cpicnts", "results"]
+  configurations:
+  - { code: sram, lbEn: True, part: 0 }
+  - { code: sram, lbEn: True, part: 1 }
+  - { code: flash, lbEn: True, part: 0 }
+  - { code: flash, lbEn: False, part: 0 }
+  - { code: gpram, lbEn: True, part: 0 }
+  - { code: gpram, lbEn: True, part: 1 }

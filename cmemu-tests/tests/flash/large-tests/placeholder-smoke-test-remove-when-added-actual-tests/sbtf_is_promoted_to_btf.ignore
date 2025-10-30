@@ -1,0 +1,9 @@
+reason: Speculative Branch Target Fetch promotion to Branch Target Forwarding is not implemented
+ignored:
+- symbols: ["times"]
+  configurations:
+  - { cc: "", div_time: 12 }
+  - { cc: "eq", div_time: 12 }
+  - { cc: "ne", div_time: 12 }
+  - { cc: "", div_time: 10 }
+  - { cc: "eq", div_time: 10 }

@@ -1,0 +1,5 @@
+reason: Execution from SRAM and SRAM-SRAM conflicts
+ignored:
+- symbols: ["push_times", "pop_times"]
+  configurations:
+  - {code: sram, lbEn: True, cache_enabled: True}

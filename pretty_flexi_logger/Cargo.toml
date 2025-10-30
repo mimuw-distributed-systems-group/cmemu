@@ -1,0 +1,23 @@
+[package]
+name = "pretty_flexi_logger"
+version = "0.30.0"
+edition = "2024"
+description = "Small port of pretty_env_logger to be used against flexi_logger used by CMEmu (cmemu-lib)."
+homepage = "https://mimuw-distributed-systems-group.github.io/cmemu/"
+repository = "https://github.com/mimuw-distributed-systems-group/cmemu"
+license = "MIT OR Apache-2.0"
+keywords = ["log", "flexi_logger"]
+categories = ["development-tools::profiling"]
+
+[features]
+default = ["colors"]
+
+colors = ["flexi_logger/colors", "dep:owo-colors"]
+
+[dependencies]
+log = "0.4"
+flexi_logger = { version = "0.30", default-features = false }
+owo-colors = { version = "3.3", optional = true, default-features = false }
+
+[lints]
+workspace = true

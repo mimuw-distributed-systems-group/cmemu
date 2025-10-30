@@ -1,0 +1,3 @@
+reason: Ignore if ROM is not available
+need_rom: driverlib
+ignored: []

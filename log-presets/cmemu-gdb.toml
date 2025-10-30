@@ -1,0 +1,4 @@
+[modules]
+'cmemu_gdb' = 'trace'
+# Use trace to get raw packed data
+'gdbstub' = 'debug'

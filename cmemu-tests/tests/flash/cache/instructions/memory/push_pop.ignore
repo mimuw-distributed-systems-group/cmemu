@@ -1,0 +1,7 @@
+reason: >
+  * Timings problems when executing code from SRAM or SRAM-SRAM conflicts
+  * Timings problems in `STR (immediate)` instruction implementation
+ignored:
+- symbols: ["times"]
+  configurations:
+  - {code: sram, lbEn: True, cache_enabled: True}

@@ -1,0 +1,356 @@
+payload_size_check: 0  # 0 to disable
+device_tree:
+  components:
+    # Always put CDL first, so it could dump the previous cycle before tick_assertions.
+    - field_name: cycle_debug_logger
+      mod_path: crate::component::cycle_debug_logger::CycleDebugLoggerComponent
+      file_path: src/component/cycle_debug_logger.rs
+      proxy_type_name: CycleDebugLoggerProxy
+      requires_feature: cycle-debug-logger
+      ticked_by: mcu_clk
+      # Starting with slaves will use fast-path in current interconnect implementation.
+      # Otherwise, this could be randomized to test for bugs.
+    - field_name: dwt
+      mod_path: crate::component::dwt::DWTComponent
+      file_path: src/component/dwt.rs
+      proxy_type_name: DWTProxy
+      ticked_by: core_gate
+    - field_name: flash
+      mod_path: crate::component::flash::FlashComponent
+      file_path: src/component/flash.rs
+      proxy_type_name: FlashProxy
+      ticked_by: vims_gate
+    - field_name: gpram
+      mod_path: crate::component::gpram::GPRAMComponent
+      file_path: src/component/gpram.rs
+      proxy_type_name: GPRAMProxy
+      ticked_by: vims_gate
+    - field_name: nvic
+      mod_path: crate::component::nvic::NVICComponent
+      file_path: src/component/nvic.rs
+      proxy_type_name: NVICProxy
+      #ticked_by: cpu_pd # This is an FCLK (Free-running clock) simulated here
+      # As we don't implement the WIC (Wakeup-Interrupt-Controller) let's put NVIC in AON part of MCU
+      # Wakeup Interrupt Controller should be ticked by inf_clk_div
+      ticked_by: mcu_clk
+    - field_name: sram
+      mod_path: crate::component::sram::SRAMComponent
+      file_path: src/component/sram.rs
+      proxy_type_name: SRAMProxy
+      ticked_by: sysbus_gate
+    - field_name: rom
+      mod_path: crate::component::rom::ROMComponent
+      file_path: src/component/rom.rs
+      proxy_type_name: ROMProxy
+      ticked_by: vims_gate
+    - field_name: prcm
+      mod_path: crate::component::prcm::PRCMComponent
+      file_path: src/component/prcm.rs
+      proxy_type_name: PRCMProxy
+      ticked_by: mcu_clk # TODO: infra/perbusull? (TI-TRM 6.5.2)
+    - field_name: mem_mock
+      mod_path: crate::component::mem_mock::MemoryMockComponent
+      file_path: src/component/mem_mock.rs
+      proxy_type_name: MemoryMockProxy
+      ticked_by: mcu_clk
+    - field_name: vims
+      mod_path: crate::component::vims::VIMSComponent
+      file_path: src/component/vims.rs
+      proxy_type_name: VIMSProxy
+      ticked_by: vims_gate
+    - field_name: sysbus
+      mod_path: crate::component::sysbus::SystemBusComponent
+      file_path: src/component/sysbus.rs
+      proxy_type_name: SystemBusProxy
+      ticked_by: sysbus_gate
+    - field_name: bus_matrix
+      mod_path: crate::component::bus_matrix::BusMatrixComponent
+      file_path: src/component/bus_matrix.rs
+      proxy_type_name: BusMatrixProxy
+      ticked_by: core_gate
+    - field_name: core
+      mod_path: crate::component::core::CoreComponent
+      file_path: src/component/core.rs
+      proxy_type_name: CoreProxy
+      ticked_by: core_gate
+    - field_name: uart_lite
+      mod_path: crate::component::uart_lite::UARTLiteComponent
+      file_path: src/component/uart_lite.rs
+      proxy_type_name: UartLiteProxy
+      ticked_by: aux_pd
+    - field_name: gpio
+      mod_path: crate::component::gpio::GPIOComponent
+      file_path: src/component/gpio.rs
+      proxy_type_name: GPIOProxy
+      ticked_by: gpio_gate
+    - field_name: aon_bus
+      mod_path: crate::component::aon_bus::AonBusComponent
+      file_path: src/component/aon_bus.rs
+      proxy_type_name: AonBusProxy
+      ticked_by: perbusull # TODO: comment about why it's needed (and why it's mcu rather than aon)
+    - field_name: rtc
+      mod_path: crate::component::rtc::RTCComponent
+      file_path: src/component/rtc.rs
+      proxy_type_name: RTCProxy
+      ticked_by: sclk_lf
+    - field_name: aon_event
+      mod_path: crate::component::aon_event::AONEventComponent
+      file_path: src/component/aon_event.rs
+      proxy_type_name: AONEventProxy
+      ticked_by: sclk_lf
+    - field_name: wuc
+      mod_path: crate::component::wuc::WUCComponent
+      file_path: src/component/wuc.rs
+      proxy_type_name: WUCProxy
+      ticked_by: sclk_lf
+    - field_name: osc
+      mod_path: crate::component::osc::OSCComponent
+      file_path: src/component/osc.rs
+      proxy_type_name: OSCProxy
+      ticked_by: sclk_lf
+    - field_name: rfc
+      mod_path: crate::component::rfc::RFCComponent
+      file_path: src/component/rfc.rs
+      proxy_type_name: RfcProxy
+      ticked_by: rfc_gate # TODO: path to it (divider and so on)
+    - field_name: event_fabric
+      mod_path: crate::component::event_fabric::EventFabricComponent
+      file_path: src/component/event_fabric.rs
+      proxy_type_name: EventFabricProxy
+      ticked_by: perbusull
+    - field_name: rtc_bypass
+      mod_path: crate::component::rtc_bypass::RTCBypass
+      file_path: src/component/rtc_bypass.rs
+      proxy_type_name: RTCBypassProxy
+      ticked_by: mcu_clk
+
+  energy:
+    proxy_type_name: ClockTreeProxy  # mustn't be changed; it's here so user knows about it
+    oscillators:
+      - name: rcosc_48m
+        struct_name: RC48M
+        cycle_in_ps: 21000  # This is within 1% (RC accuracy) of 48MHz: a round number different from the crystal.
+      # NOTE: It is a 24MHz crystal doubled internally, but let's ignore that for simplicity.
+      - name: xtal_48m
+        struct_name: X48M
+        cycle_in_ps: 20834  # 48MHz rounded
+
+    # TODO: check all config_type fields
+    clock_tree:
+      # Temporary to inline code
+      - name: sclk_hf
+        struct_name: SclkHf
+        kind: Switch
+        config_type: !Switch [ rcosc_48m, xtal_48m ]
+        ticked_by: rcosc_48m
+      # TEMP
+      - name: sclk_hf_div
+        struct_name: SclkDivider
+        kind: Divider
+        config_type: !Global 1536
+        ticked_by: sclk_hf
+      - name: sclk_lf
+        struct_name: SclkLf
+        kind: Switch
+        # TODO [ rc_osc_48m_div, xtal_48m_div, rc_osc_32k, xtal_32k ]
+        config_type: !Switch [ sclk_hf_div ]
+        ticked_by: sclk_hf_div
+      # A node that is never ticking
+      - name: null
+        struct_name: NullClk
+        kind: Gate
+        config_type: !Global 0
+        ticked_by: sclk_lf # something random here
+      ## sclk_lf_aux, aclk_adv, aclk_tdc, aclk_ref are omitted here
+
+      # At the top of [TI-TRM] Figure 6-6
+      - name: mcu_clk
+        struct_name: McuClk
+        kind: Switch
+        config_type: !Switch [ sclk_hf, sclk_lf, null ]
+        ticked_by: sclk_hf
+
+      - name: core_gate
+        struct_name: CoreGate
+        kind: Gate
+        config_type: !Global 1
+        ticked_by: cpu_pd
+      - name: sysbus_gate
+        struct_name: SysbusGate
+        kind: Gate
+        config_type: !Computed 1
+        ticked_by: bus_pd
+      - name: vims_gate
+        struct_name: VimsGate
+        kind: Gate
+        config_type: !Global 1
+        ticked_by: vims_pd
+      - name: uart_gate
+        struct_name: UartGate
+        kind: Gate
+        config_type: !Global 0
+        ticked_by: serial_pd
+      - name: dma_gate
+        struct_name: DmaGate
+        kind: Gate
+        config_type: !Global 0
+        ticked_by: periph_pd
+      - name: crypto_gate
+        struct_name: CryptoGate
+        kind: Gate
+        config_type: !Global 0
+        ticked_by: periph_pd
+      - name: trng_gate
+        struct_name: TrngGate
+        kind: Gate
+        config_type: !Global 0
+        ticked_by: periph_pd
+      - name: gpt0_gate
+        struct_name: Gpt0Gate
+        kind: Gate
+        config_type: !Global 0
+        ticked_by: periph_pd
+      - name: gpt1_gate
+        struct_name: Gpt1Gate
+        kind: Gate
+        config_type: !Global 0
+        ticked_by: periph_pd
+      - name: gpt2_gate
+        struct_name: Gpt2Gate
+        kind: Gate
+        config_type: !Global 0
+        ticked_by: periph_pd
+      - name: gpt3_gate
+        struct_name: Gpt3Gate
+        kind: Gate
+        config_type: !Global 0
+        ticked_by: periph_pd
+      - name: gpio_gate
+        struct_name: GpioGate
+        kind: Gate
+        config_type: !Global 0
+        ticked_by: periph_pd
+      - name: rfc_gate
+        struct_name: RfcGate
+        kind: Gate
+        config_type: !Global 0
+        ticked_by: rfcore_pd # TODO: fix to divider
+      - name: rfc_divider
+        struct_name: RfcDivider
+        kind: Divider
+        config_type: !Global 2
+        ticked_by: rfcore_pd
+      - name: inf_clk_div
+        struct_name: InfrastructureDivider
+        kind: Divider
+        config_type: !Global 1 # TODO: implement it
+        ticked_by: mcu_clk
+      - name: perbusull
+        struct_name: PerbusullSysbusGate
+        kind: Gate
+        config_type: !Global 1
+        ticked_by: inf_clk_div
+      # Implicit Power-Domains "gate override"
+      # NOTE: this is inverted wrt the [TI-TRM] Figure 6-6, but it matters only for SSI0 periph
+      - name: periph_pd
+        struct_name: PeriphPowerDomain
+        kind: Gate
+        config_type: !PowerDomainGate 0
+        ticked_by: mcu_clk
+      - name: serial_pd
+        struct_name: SerialPowerDomain
+        kind: Gate
+        config_type: !PowerDomainGate 0
+        ticked_by: mcu_clk
+      - name: vims_pd
+        struct_name: VimsPowerDomain
+        kind: Gate
+        config_type: !PowerDomainGate 1
+        ticked_by: mcu_clk
+      - name: bus_pd
+        struct_name: BusPowerDomain
+        kind: Gate
+        config_type: !PowerDomainGate 1
+        ticked_by: mcu_clk
+      - name: cpu_pd
+        struct_name: CpuPowerDomain
+        kind: Gate
+        config_type: !PowerDomainGate 1
+        ticked_by: mcu_clk
+      - name: rfcore_pd
+        struct_name: RfcorePowerDomain
+        kind: Gate
+        config_type: !PowerDomainGate 0
+        ticked_by: mcu_clk
+      # ???
+      - name: aux_pd
+        struct_name: AuxPowerDomain
+        kind: Gate
+        config_type: !PowerDomainGate 1
+        ticked_by: sclk_hf # TODO: AUX has a divider
+      - name: jtag_pd
+        struct_name: JtagPowerDomain
+        kind: Gate
+        config_type: !PowerDomainGate 1
+        ticked_by: sclk_lf
+
+    # For cc2650, "vdd" is a root of the tree
+    # [TI-TRM] 6.3 Supply System, Figures 6.2 and 6.3
+    # currently unused, but reproduced for a future case
+    energy_domains:
+      - name: mcu_vd
+        kind: VoltageDomain
+        parent: vdd
+      - name: aon_vd
+        kind: VoltageDomain
+        parent: vdd
+      - name: mcu_aon
+        kind: PowerDomain
+        config_type: !Aon
+        parent: mcu_vd
+        # children: PRCM, WIC, Event Fabric, IOC, Watchdog, AON int
+      - name: cpu_pd
+        kind: PowerDomain
+        config_type: !Computed
+        parent: mcu_vd
+        # children: CPU, JTAG DAP
+      - name: periph_pd
+        kind: PowerDomain
+        config_type: !PowerDomain 0
+        parent: mcu_vd
+        # children: DMA, CRYPTO, TRNG, GPT, GPIO, SSI1, I2S
+      - name: bus_pd
+        kind: PowerDomain
+        config_type: !Computed
+        parent: mcu_vd
+        # children: Interconnect, System SRAM
+      - name: serial_pd
+        kind: PowerDomain
+        config_type: !PowerDomain 0
+        parent: mcu_vd
+        # children: UART, SSI0, I2C
+      - name: vims_pd
+        kind: PowerDomain
+        config_type: !PowerDomain 1
+        parent: mcu_vd
+        # children: FLASH, ROM, Cache, OTP, EFUSE
+      - name: rfcore_pd
+        kind: PowerDomain
+        config_type: !PowerDomain 0
+        parent: mcu_vd
+        # children: RFC_Doorbell, RAT, RFCore (M0), RFCore SRAM (retention), ROM, registers
+      - name: aon
+        kind: PowerDomain
+        config_type: !Aon
+        parent: aon_vd
+        # children: Edge detec, IO mux, IO latch, AON event fabric, SYS CTL, MCU WUC, AUX WUC, RTC
+      - name: aux_pd
+        kind: PowerDomain
+        config_type: !PowerDomain 1
+        parent: aux_vd
+        # children: Sensor Controller, SC SRAM, OSC, AON IOC, Analog, TDC, Timers
+      - name: jtag_pd
+        kind: PowerDomain
+        config_type: !PowerDomain 1
+        parent: aux_vd
+        # children: ICEPick JTAG router, IEEE1149.7 cJTAG

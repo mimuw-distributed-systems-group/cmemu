@@ -1,0 +1,19 @@
+reason: >
+    Interrupt timing is currently out of scope
+ignored:
+- symbols: ["times", "exccnts", "cpicnts"]
+  configurations:
+  - { code: gpram, handler: gpram, lbEn: True }
+  - { code: gpram, handler: sram, lbEn: True }
+  - { code: gpram, handler: flash, lbEn: True }
+  - { code: gpram, handler: flash, lbEn: False }
+  - { code: sram, handler: gpram, lbEn: True }
+  - { code: sram, handler: sram, lbEn: True }
+  - { code: sram, handler: flash, lbEn: True }
+  - { code: sram, handler: flash, lbEn: False }
+  - { code: flash, handler: gpram, lbEn: True }
+  - { code: flash, handler: sram, lbEn: True }
+  - { code: flash, handler: flash, lbEn: True }
+  - { code: flash, handler: gpram, lbEn: False }
+  - { code: flash, handler: sram, lbEn: False }
+  - { code: flash, handler: flash, lbEn: False }

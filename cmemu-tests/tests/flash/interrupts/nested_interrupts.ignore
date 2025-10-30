@@ -1,0 +1,7 @@
+reason: >
+  The timing of interrupts is out of scope right now.
+ignored:
+- symbols: ["times", "exccnts"]
+  configurations:
+    - { part: 0 }
+    - { part: 1 }

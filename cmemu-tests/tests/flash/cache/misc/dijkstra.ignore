@@ -1,0 +1,9 @@
+reason: Timing of code from SRAM is currently out of scope
+ignored:
+- symbols: ["execution_time"]
+  configurations:
+    - { code_mem: sram, data_mem: flash, lbEn: True, input_data_set: 0 }
+    - { code_mem: sram, data_mem: flash, lbEn: True, input_data_set: 1 }
+    - { code_mem: sram, data_mem: flash, lbEn: True, input_data_set: 2 }
+    - { code_mem: sram, data_mem: flash, lbEn: True, input_data_set: 3 }
+    - { code_mem: sram, data_mem: flash, lbEn: True, input_data_set: 4 }

@@ -1,0 +1,44 @@
+{
+  "name": "cdl-viewer",
+  "version": "0.1.0",
+  "homepage": "./",
+  "private": true,
+  "license": "(MIT OR Apache-2.0)",
+  "dependencies": {
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.5.0",
+    "@testing-library/user-event": "^7.2.1",
+    "ansicolor": "^1.1.100",
+    "bootstrap": "^4.5.0",
+    "flexsearch": "github:nextapps-de/flexsearch#0.6.22",
+    "immutable": "^4.0.0-rc.12",
+    "jquery": "^3.5.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-hotkeys": "^2.0.0-pre9",
+    "react-scripts": "^3.4.4",
+    "react-virtualized": "^9.22.3"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "build-and-copy": "npm run build && rm -r ../build && cp -r build ../build"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

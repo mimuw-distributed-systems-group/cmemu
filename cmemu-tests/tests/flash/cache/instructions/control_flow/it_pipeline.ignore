@@ -1,0 +1,6 @@
+reason: Execution from SRAM or SRAM-SRAM conflicts
+ignored:
+- symbols: ["times"]
+  configurations:
+  - {code: "sram", lbEn: True, zeroFlagValue: True, cache_enabled: True}
+  - {code: "sram", lbEn: True, zeroFlagValue: False, cache_enabled: True}

@@ -1,0 +1,7 @@
+reason: Conflicts resolution is not working as it should
+ignored:
+- symbols: [times]
+  configurations:
+    - { code: sram, data: sram, offsets: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+    - { code: sram, data: sram, offsets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15] }
+    - { code: sram, data: sram, offsets: [11, 14, 7, 4, 5, 1, 0, 10, 2, 8, 13, 9, 6, 12, 3, 15] }

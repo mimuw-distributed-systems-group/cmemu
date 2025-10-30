@@ -1,0 +1,14 @@
+# Run a Contiki app/test until it hits a `wfi` instruction, then enable cycle-stepping and verbose clock&power logs
+monitor log push env
+add-symbol-file rom/driverlib.elf
+break CPUwfi
+# rbreak seems broken?
+break __asm___6_hapi_c_d9bbe02e__CPUwfi
+break __asm___11_driverlib_c_a91c79fe__CPUwfi
+define hook-quit
+    set confirm off
+end
+continue
+monitor step-cycle
+monitor log dup
+monitor log add file log-presets/sleep-verbose.toml

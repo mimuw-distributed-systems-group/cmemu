@@ -1,0 +1,65 @@
+SELF_DIR ::= $(dir $(lastword $(MAKEFILE_LIST)))
+
+CC      = arm-none-eabi-gcc
+CPP     = arm-none-eabi-cpp
+LD      = arm-none-eabi-gcc
+AS      = arm-none-eabi-as
+AR      = arm-none-eabi-gcc-ar
+OBJCOPY = arm-none-eabi-objcopy
+OBJDUMP = arm-none-eabi-objdump
+NM      = arm-none-eabi-gcc-nm
+RANLIB  = arm-none-eabi-gcc-ranlib
+
+# These flags should be kept as is for proper cross-compilation
+BASE_CFLAGS += -mcpu=cortex-m3 -mthumb -mlittle-endian
+BASE_CFLAGS += -fno-builtin-printf -fno-builtin-sprintf -fno-builtin-snprintf -fno-builtin-vprintf
+BASE_CFLAGS += -fno-exceptions
+BASE_CFLAGS += -I$(SELF_DIR)
+
+# These flags are a sane default, but could be safely discarded
+EXTRA_CFLAGS += -fshort-enums -fomit-frame-pointer -fno-strict-aliasing
+EXTRA_CFLAGS += -Wall -Werror -std=c99
+
+# Override this first in your Makefile. Some ideas are listed below
+OPTIMIZATION_FLAGS ?= -Og -ggdb3 -gz
+#OPTIMIZATION_FLAGS ?= -flto -ffat-lto-objects -Os -g
+#OPTIMIZATION_FLAGS ?= -Os -g -ffunction-sections -fdata-sections
+#OPTIMIZATION_FLAGS ?= -O0 -g -ffunction-sections -fdata-sections
+
+CFLAGS = $(BASE_CFLAGS) $(EXTRA_CFLAGS) $(OPTIMIZATION_FLAGS)
+
+LDSCRIPT = cc26xx.lds
+LDFLAGS += $(CFLAGS)
+LDFLAGS += -T $(SELF_DIR)$(LDSCRIPT) -Wl,--gc-sections
+
+OBJDUMP_FLAGS += --disassembler-options=force-thumb,reg-names-std
+OBJCOPY_FLAGS += -O binary --gap-fill 0xff
+
+# You can override this (possibly in a pattern override) to link extra libs
+LIBRARIES ?=
+
+CMEMU_BASE_DEPS = $(SELF_DIR)cc26xx.o
+CMEMU_LIBC_DEPS = $(SELF_DIR)/cmemu-crt1.o $(SELF_DIR)newlib_funs.o
+
+# This syntax updates the var only for matching targets
+$(raw_targets): LDFLAGS += -nostdlib -nostdinc
+$(stdlib_targets): LDFLAGS += -specs=nosys.specs
+# This syntax adds dependencies for entries matching the pattern
+$(stdlib_targets): %.elf : $(CMEMU_LIBC_DEPS)
+
+# Don't treat the .elf as intermediate
+.PRECIOUS: %.elf
+
+$(SELF_DIR)%.o: $(SELF_DIR)semihosting.h
+
+%.elf: %.o $(CMEMU_BASE_DEPS)
+	$(LD) $(LDFLAGS) -Wl,-\( $^ $(LIBRARIES) -Wl,-\) -o $@
+
+%.o: %.S $(MAKEFILE_LIST)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+%.o: %.c $(MAKEFILE_LIST)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+%.flash: %.elf
+	$(OBJCOPY) $(OBJCOPY_FLAGS) $< $@

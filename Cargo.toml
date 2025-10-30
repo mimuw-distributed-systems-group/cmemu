@@ -1,0 +1,162 @@
+[workspace]
+resolver = "2"
+members = [
+    "cmemu",
+    "cmemu-lib",
+    "cmemu-tests",
+    "cmemu-flash-test",
+    "cmemu-flash-test-lib",
+    "cmemu-codegen",
+    "cmemu-proc-macros",
+    "cmemu-elf-loader",
+    "cmemu-gdb",
+    "cmemu-common",
+    "cc2650-constants",
+    # This is a mini crate that lives here hopefully just for a while (we need this in multiple binary crates)
+    "pretty_flexi_logger",
+    # To be extracted to a private repo
+    "confeature",
+]
+
+# More about profiles: https://doc.rust-lang.org/cargo/reference/profiles.html
+[profile.bench]
+lto = true
+codegen-units = 1 # this helps inlining, speeds up by ~7%
+# PGO can't be specified here
+
+# Consider using the "test-opt" profile, so that it doesn't thrash build cache & employ more optimizations
+[profile.test]
+opt-level = 3
+lto = true
+debug-assertions = true
+overflow-checks = true
+
+[profile.dev]
+# We have a lot of generated code for decoupling designed to collapse under optimization
+# Running with opt-level = 0 is utterly slow
+opt-level = 1
+debug-assertions = true
+overflow-checks = true
+
+# A profile for fast recompilation (no lto), but still lots of local optimizations.
+# Also, not invalidating dev profile for fast `cargo check`s.
+[profile.dev-opt]
+inherits = "dev"
+opt-level = 2
+codegen-units = 32
+lto = false # This is very slow (due to massive cc2650-constants)
+debug = true
+debug-assertions = true
+overflow-checks = true
+
+# Profiles to ultimately optimize performance
+# Also try
+# RUSTFLAGS="-A warnings -C target-cpu=native  -C llvm-args=--enable-partial-inlining " cargo build --profile uber
+# --enable-partial-inlining gives ~5% boost
+[profile.uber.package.slab]
+opt-level = 3
+
+[profile.uber]
+inherits = "release"
+lto = true
+opt-level = 3
+codegen-units = 1 # this helps inlining, speeds up by ~7%
+panic = 'abort'
+debug = true # this controls debug info, should not interfere with optimization
+debug-assertions = false
+overflow-checks = false
+
+# Building for ICM topola:
+# RUSTFLAGS="-C target-cpu=haswell" cargo build -p cmemu-flash-test --no-default-features --profile uber-strip --target=x86_64-unknown-linux-musl
+# passing -A warnings in RUSTFLAGS break cargo for some wird reason
+[profile.uber-strip]
+inherits = "uber"
+debug = false
+
+[profile.uber-checked]
+inherits = "uber"
+debug-assertions = true
+overflow-checks = true
+
+[profile.test-opt]
+inherits = "uber-checked"
+panic = "unwind"
+
+#########################################
+# Definitions of lints and warnings.
+
+# These are inherited by the workspace members with a `[lints] workspace = true` entry.
+# As of 1.89, these cannot be overriden in member's Cargo.toml, so use `lib.rs` for that.
+#
+# Prefer using `warn` rather than `deny` for non-crucial lints, as these are forbidden in CI anyway.
+# `deny` breaks running clippy at dependent crates in the workspace.
+###########################################
+
+[workspace.lints.rust]
+# Consider enabling more
+missing_debug_implementations = "warn"
+# missing_docs = "warn"  # TODO: write all the docs...
+non_ascii_idents = "warn"
+impl_trait_redundant_captures = "warn"
+let_underscore_drop = "warn"
+rust_2024_compatibility = { level = "warn", priority = -4 }
+edition_2024_expr_fragment_specifier = "allow"
+#unreachable_pub = "warn"
+unused_lifetimes = "warn"
+unsafe_code = "warn" # confeature uses #[no_mangle/export_name/link_section]
+
+[workspace.lints.rustdoc]
+# Doc lints. Consider denying more in the future: https://doc.rust-lang.org/rustdoc/lints.html.
+broken_intra_doc_links = "deny"
+invalid_codeblock_attributes = "deny"
+
+[workspace.lints.clippy]
+# Lint groups go first
+all = { level = "warn", priority = -3 }
+pedantic = { level = "warn", priority = -2 }
+cargo = { level = "warn", priority = -1 }
+
+# Lints from pedantic
+# ---->
+missing_panics_doc = "allow"  # Remove the allow when we enable the main "missing_docs" lint
+missing_errors_doc = "allow"  # Remove the allow when we enable the main "missing_docs" lint
+# Let's agree to disagree abount suggesting Type::default() instead of Default::default().
+# If I wanted a type name, I'd rather use Type::new().
+default_trait_access = "allow"
+negative_feature_names = "allow" #  TODO: replace (no_)paranoid with a "strictness" confeature
+# <----
+
+# Lints from nursery (as of 1.89)
+# ---->
+#use_self = "warn"
+useless_let_if_seq = "warn"
+# <----
+
+# Restrictions from clippy::restrictions (must be cherry-picked!)
+# Try sorting the list alphabetically, with exceptions of lints that are very similar.
+# Last update revision: 1.84, you may want to screen new lints for inclusion!
+# ---->
+absolute_paths = "warn" # too long abs paths in non-macro code,
+big_endian_bytes = "warn" # CM is little endian by default, oher casts are probably a bug!
+host_endian_bytes = "warn" # CM is little endian by default, other casts are probably a bug!
+dbg_macro = "warn" # Don't leave it! (allowed in tests).
+decimal_literal_representation = "warn" # Prefer hex for large round decimals.
+error_impl_error = "warn" # Don't just name the error an `Error`.
+exhaustive_enums = "warn" # Missing #[non_exhaustive] is a stability commitment. We prefer whitelisting.
+exhaustive_structs = "warn" # Missing #[non_exhaustive] is a stability commitment.
+fn_to_numeric_cast_any = "warn" # Doing `func as usize` instead of `func() as usize`.
+if_then_some_else_none = "warn" # personal preference, uncomment to inspect the code
+non_ascii_literal = "warn"
+precedence_bits = "warn" # Require parentheses between &/| and bit shifts >>/<<
+rc_buffer = "warn" # Strongly suggest using the weaker type.
+rc_mutex = "warn" # Looks like mixing Rc/Mutex instead of Arc/RefCell.
+redundant_test_prefix = "warn" # Don't name test functions "test_"
+#same_name_method = "warn" # Same method name from trait and as inherent. TODO: tick()
+str_to_string = "warn" # Require using "str".to_owned() instead of .to_string()
+# Run manually, as it has false positives on integration tests. Enable once rust-clippy#13038 is fixed.
+#tests_outside_test_module = "warn" # Must put tests into #[cfg(test)]
+too_long_first_doc_paragraph = "warn"
+# todo = "warn" # Enable when we're very stable (use unimplemented!() for long-term)
+unused_result_ok = "warn"
+# unused_trait_names = "warn" # Require using 'use ...::Trait as _' if it is not used by name
+# <----

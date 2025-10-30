@@ -1,0 +1,6 @@
+reason: Execution from SRAM does not work proparely
+ignored:
+- symbols: ["times"]
+  configurations:
+  - { code: "sram", addr0: "sram", addr1: "sram", strInstr: "str.w" }
+  - { code: "sram", addr0: "sram", addr1: "sram", strInstr: "str.n" }

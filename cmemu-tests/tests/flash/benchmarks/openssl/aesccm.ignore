@@ -1,0 +1,5 @@
+reason: Does not fit in memory
+ignored:
+- symbols: []
+  configurations:
+  - {}

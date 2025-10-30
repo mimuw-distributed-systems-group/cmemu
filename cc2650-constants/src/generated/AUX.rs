@@ -1,0 +1,15 @@
+use cmemu_common::Address;
+use core::ops::Range;
+pub const START_ADDR: Address = AIODIO0::ADDR;
+pub use super::AUX_ADI4 as ADI4;
+pub use super::AUX_AIODIO0 as AIODIO0;
+pub use super::AUX_AIODIO1 as AIODIO1;
+pub use super::AUX_ANAIF as ANAIF;
+pub use super::AUX_DDI0_OSC as DDI0_OSC;
+pub use super::AUX_EVCTL as EVCTL;
+pub use super::AUX_SCE as SCE;
+pub use super::AUX_SMPH as SMPH;
+pub use super::AUX_TDCIF as TDCIF;
+pub use super::AUX_TIMER as TIMER;
+pub use super::AUX_WUC as WUC;
+pub const ADDR_SPACE: Range<Address> = START_ADDR..SCE::ADDR_SPACE.end;

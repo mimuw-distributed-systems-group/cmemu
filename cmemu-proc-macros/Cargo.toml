@@ -1,0 +1,21 @@
+[package]
+name = "cmemu-proc-macros"
+version = "0.1.0"
+edition = "2024"
+description = "Macros used in CMEmu (cmemu-lib)."
+homepage = "https://mimuw-distributed-systems-group.github.io/cmemu/"
+repository = "https://github.com/mimuw-distributed-systems-group/cmemu"
+license = "MIT OR Apache-2.0"
+keywords = ["CMEmu", "macro"]
+categories = ["emulators"]
+
+[lib]
+proc-macro = true
+
+# ------ Consult `Cargo dependencies` in `GUIDELINES.md` before changing. ------
+[dependencies]
+cmemu-codegen = { path = "../cmemu-codegen/" }
+syn = { version = "2.0.104", features = ['parsing', "proc-macro"] }
+
+[lints]
+workspace = true

@@ -1,0 +1,30 @@
+[package]
+name = "cmemu-elf-loader"
+version = "0.2.0"
+edition = "2024"
+description = "Loads ELF into CMEmu (cmemu-lib) for emulation."
+homepage = "https://mimuw-distributed-systems-group.github.io/cmemu/"
+repository = "https://github.com/mimuw-distributed-systems-group/cmemu"
+license = "MIT OR Apache-2.0"
+keywords = ["CMEmu", "ELF"]
+categories = ["emulators"]
+
+[features]
+
+builder = ["object/build_core", "object/write_std"]
+
+[dependencies]
+cmemu-lib = { path = "../cmemu-lib/", default-features = false, features = ["pretty_log"] }
+cc2650-constants = { path = "../cc2650-constants", default-features = false, features = ["register-names"] }
+log = "0.4"
+clap = { version = "4.5", features = ["derive"] }
+object = { version = "0.36", default-features = false, features = ["read_core", "elf", "unaligned", "compression", "std"] }
+parse_int = "0.6"
+
+[dev-dependencies]
+assert_cmd = "2.0.10"
+predicates = "3.1.1"
+tempfile = { version = "3.7.0" }
+
+[lints]
+workspace = true

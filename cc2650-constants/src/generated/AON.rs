@@ -1,0 +1,10 @@
+use cmemu_common::Address;
+use core::ops::Range;
+pub const START_ADDR: Address = SYSCTL::ADDR;
+pub use super::AON_BATMON as BATMON;
+pub use super::AON_EVENT as EVENT;
+pub use super::AON_IOC as IOC;
+pub use super::AON_RTC as RTC;
+pub use super::AON_SYSCTL as SYSCTL;
+pub use super::AON_WUC as WUC;
+pub const ADDR_SPACE: Range<Address> = START_ADDR..BATMON::ADDR_SPACE.end;

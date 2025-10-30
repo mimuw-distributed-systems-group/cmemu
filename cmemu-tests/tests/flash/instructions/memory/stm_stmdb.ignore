@@ -1,0 +1,7 @@
+reason: >
+    SRAM-SRAM conflicts needs to be fixed.
+ignored:
+- symbols: ["times"]
+  configurations:
+  - { code: sram, data: sram, lbEn: true, repetitions: 7, instr: stm }
+  - { code: sram, data: sram, lbEn: true, repetitions: 7, instr: stmdb }

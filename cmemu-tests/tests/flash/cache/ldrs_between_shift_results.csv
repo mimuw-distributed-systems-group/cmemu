@@ -1,0 +1,17 @@
+prefetch, second_ldr_variant, between_ldrs, tag_hit, cache_hit, rng_shift, cycles
+False, next_line, two_plus_4, False, False, 2, 13
+False, next_line, two_plus_4, True, False, 1, 12
+False, next_line, one_tag_miss_cache_hit, False, False, 2, 13
+False, next_line, one_tag_miss_cache_hit, True, False, 1, 12
+False, next_line, one_plus_4, False, False, 1, 11
+False, next_line, one_plus_4, True, False, 0, 10
+False, next_line, one_tag_miss_cache_miss, False, False, 3, 15
+False, next_line, one_tag_miss_cache_miss, True, False, 2, 14
+True, next_line, two_plus_4, False, False, 2, 13
+True, next_line, two_plus_4, True, False, 1, 12
+True, next_line, one_tag_miss_cache_hit, False, False, 2, 13
+True, next_line, one_tag_miss_cache_hit, True, False, 1, 12
+True, next_line, one_plus_4, False, False, 1, 11
+True, next_line, one_plus_4, True, False, 0, 10
+True, next_line, one_tag_miss_cache_miss, False, False, 3, 15
+True, next_line, one_tag_miss_cache_miss, True, False, 2, 14

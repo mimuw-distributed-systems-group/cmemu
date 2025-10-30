@@ -1,0 +1,11 @@
+reason: STIR is incorrectly implemented.
+ignored:
+- symbols:
+  - control_after_execution
+  - control_before_execution
+  - has_sp_changed
+  configurations:
+  - { code: "gpram", lbEn: true, new_control_values: [0,2] }
+  - { code: "sram", lbEn: true, new_control_values: [0,2] }
+  - { code: "flash", lbEn: true, new_control_values: [0,2] }
+  - { code: "flash", lbEn: false, new_control_values: [0,2] }

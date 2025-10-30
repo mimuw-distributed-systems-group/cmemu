@@ -1,0 +1,5 @@
+reason: The test is not deterministic
+ignored:
+- symbols: [times]
+  configurations:
+    - { code: "gpram", lbEn: true }

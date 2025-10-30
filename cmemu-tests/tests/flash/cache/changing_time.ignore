@@ -1,0 +1,5 @@
+reason: The timing of switching VIMS modes is currently not emulated.
+ignored:
+- symbols: ["times", "stats", "count"]
+  configurations:
+  - { code: "sram", lbEn: True , repetitions: 10 }

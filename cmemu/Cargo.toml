@@ -1,0 +1,31 @@
+[package]
+name = "cmemu"
+version = "0.1.0"
+edition = "2024"
+description = "Frontend of the CMEmu (cmemu-lib)."
+homepage = "https://mimuw-distributed-systems-group.github.io/cmemu/"
+repository = "https://github.com/mimuw-distributed-systems-group/cmemu"
+license = "MIT OR Apache-2.0"
+keywords = ["CMEmu"]
+categories = ["emulators"]
+
+[features]
+default = ["elf"]
+
+# Enables Cycle Debug Logger (abbr. CDL). Opting out makes emulator faster.
+cycle-debug-logger = ["cmemu-lib/cycle-debug-logger"]
+elf = ["cmemu-elf-loader"]
+gdb = ["cmemu-gdb"]
+
+# ------ Consult `Cargo dependencies` in `GUIDELINES.md` before changing. ------
+[dependencies]
+cmemu-lib = { path = "../cmemu-lib/" }
+cmemu-elf-loader = { path = "../cmemu-elf-loader/", optional = true }
+cmemu-gdb = { path = "../cmemu-gdb/", optional = true }
+log = { version = "0.4", features = ["release_max_level_warn"] }
+flexi_logger = { version = "0.30.1" }
+pretty_flexi_logger = { path = "../pretty_flexi_logger" }
+clap = { version = "4.1", features = ["derive"] }
+
+[lints]
+workspace = true

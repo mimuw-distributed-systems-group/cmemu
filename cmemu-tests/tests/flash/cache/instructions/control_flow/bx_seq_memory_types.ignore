@@ -1,0 +1,7 @@
+reason: branches to sram don't work fully
+ignored:
+- symbols: ["times"]
+  configurations:
+  - {codePlaces: [flash, sram], lbEn: True, cache_enabled: True}
+  - {codePlaces: [sram, flash], lbEn: True, cache_enabled: True}
+

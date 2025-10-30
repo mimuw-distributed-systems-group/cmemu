@@ -1,0 +1,6 @@
+reason: >
+  Conflict sram-sram works in weird way.
+ignored:
+- symbols: ["times"]
+  configurations:
+  - {code: sram, memory: sram, lbEn: True, cache_enabled: True}

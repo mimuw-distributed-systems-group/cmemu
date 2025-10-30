@@ -1,0 +1,11 @@
+reason: STIR is incorrectly implemented.
+ignored:
+- symbols:
+  - write_times
+  - read_times
+  - results
+  configurations:
+  - { code: "gpram", lbEn: true }
+  - { code: "sram", lbEn: true }
+  - { code: "flash", lbEn: true }
+  - { code: "flash", lbEn: false }

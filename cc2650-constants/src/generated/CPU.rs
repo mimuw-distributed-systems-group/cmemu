@@ -1,0 +1,10 @@
+use cmemu_common::Address;
+use core::ops::Range;
+pub const START_ADDR: Address = ITM::ADDR;
+pub use super::CPU_DWT as DWT;
+pub use super::CPU_FPB as FPB;
+pub use super::CPU_ITM as ITM;
+pub use super::CPU_SCS as SCS;
+pub use super::CPU_TIPROP as TIPROP;
+pub use super::CPU_TPIU as TPIU;
+pub const ADDR_SPACE: Range<Address> = START_ADDR..TIPROP::ADDR_SPACE.end;

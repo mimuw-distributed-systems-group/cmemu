@@ -1,0 +1,6 @@
+reason: Execution from SRAM does not work proparely for stores
+ignored:
+- symbols: ["times", "cpicnts", "lsucnts"]
+  configurations:
+  - {'code': 'sram', 'lbEn': True, 'instrs': ['str.n'], 'it': False}
+  - {'code': 'sram', 'lbEn': True, 'instrs': ['str.n'], 'it': True}

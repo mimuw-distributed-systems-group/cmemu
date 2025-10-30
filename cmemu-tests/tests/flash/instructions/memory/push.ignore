@@ -1,0 +1,6 @@
+
+reason: SRAM execution is wrong
+ignored:
+- symbols: ["times"]
+  configurations:
+  - { code: sram, lbEn: true }

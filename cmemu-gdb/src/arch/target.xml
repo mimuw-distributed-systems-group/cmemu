@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<!--
+    This is what openocd would generate, modified by us.
+    It is a derivative of:
+    https://github.com/bminor/binutils-gdb/blob/master/gdb/features/arm/arm-m-profile.xml
+
+    Copyright (C) 2010-2024 Free Software Foundation, Inc.
+
+    Copying and distribution of this file, with or without modification,
+    are permitted in any medium without royalty provided the copyright
+    notice and this notice are preserved.
+-->
+<!DOCTYPE target SYSTEM "gdb-target.dtd">
+<target>
+    <feature name="org.gnu.gdb.arm.m-profile">
+        <reg name="r0" bitsize="32" type="uint32" regnum="0" group="general"/>
+        <reg name="r1" bitsize="32" type="uint32" regnum="1" group="general"/>
+        <reg name="r2" bitsize="32" type="uint32" regnum="2" group="general"/>
+        <reg name="r3" bitsize="32" type="uint32" regnum="3" group="general"/>
+        <reg name="r4" bitsize="32" type="uint32" regnum="4" group="general"/>
+        <reg name="r5" bitsize="32" type="uint32" regnum="5" group="general"/>
+        <reg name="r6" bitsize="32" type="uint32" regnum="6" group="general"/>
+        <reg name="r7" bitsize="32" type="uint32" regnum="7" group="general"/>
+        <reg name="r8" bitsize="32" type="uint32" regnum="8" group="general"/>
+        <reg name="r9" bitsize="32" type="uint32" regnum="9" group="general"/>
+        <reg name="r10" bitsize="32" type="uint32" regnum="10" group="general"/>
+        <reg name="r11" bitsize="32" type="uint32" regnum="11" group="general"/>
+        <reg name="r12" bitsize="32" type="uint32" regnum="12" group="general"/>
+        <reg name="sp" bitsize="32" type="data_ptr" regnum="13" group="general"/>
+        <reg name="lr" bitsize="32" type="uint32" regnum="14" group="general"/>
+        <reg name="pc" bitsize="32" type="code_ptr" regnum="15" group="general"/>
+        <flags id="xPSR_type" size="4">
+            <field name="N" start="31" end="31"/>
+            <field name="Z" start="30" end="30"/>
+            <field name="C" start="29" end="29"/>
+            <field name="V" start="28" end="28"/>
+            <field name="Q" start="27" end="27"/>
+            <field name="T" start="24" end="24"/>
+            <!-- Access to ITSTATE fields is broken - is GDB manipulating the bits? -->
+            <field name="exc" start="0" end="8"/>
+        </flags>
+        <reg name="xPSR" bitsize="32" type="xPSR_type" regnum="16" group="general"/>
+    </feature>
+    <feature name="org.gnu.gdb.arm.m-system">
+        <reg name="msp" bitsize="32" type="data_ptr" regnum="17" group="system"/>
+        <reg name="psp" bitsize="32" type="data_ptr" regnum="18" group="system"/>
+        <!-- the enums seem to be broken in gcc ...
+        <enum id="it_cond_type" size="4">
+            <evalue name="eq" value="0"/>
+            <evalue name="ne" value="1"/>
+            <evalue name="cs" value="2"/>
+            <evalue name="cc" value="3"/>
+            <evalue name="mi" value="4"/>
+            <evalue name="pl" value="5"/>
+            <evalue name="vs" value="6"/>
+            <evalue name="vc" value="7"/>
+            <evalue name="hi" value="8"/>
+            <evalue name="ls" value="9"/>
+            <evalue name="ge" value="10"/>
+            <evalue name="lt" value="11"/>
+            <evalue name="gt" value="12"/>
+            <evalue name="le" value="13"/>
+            <evalue name="al" value="14"/>
+            <evalue name="nv" value="15"/>
+        </enum>
+        <flags id="ITSTATE_type" size="1">
+            <field name="" start="0" end="3"/>
+            <field name="c" start="4" end="7" type="it_cond_type"/>
+        </flags>
+        -->
+        <reg name="ITSTATE" bitsize="8" type="uint8" regnum="19" group="system"/>
+
+        <enum id="PRIMASK" size="1">
+            <evalue name="not set" value="0"/>
+            <evalue name="0" value="1"/>
+        </enum>
+        <flags id="primask_bits" size="1">
+            <field name="prio" start="0" end="0" type="PRIMASK"/>
+        </flags>
+        <reg name="primask" bitsize="1" type="primask_bits" regnum="20" group="system"/>
+        <reg name="basepri" bitsize="8" type="int8" regnum="21" group="system"/>
+        <enum id="FAULTMASK" size="1">
+            <evalue name="not set" value="0"/>
+            <evalue name="-1" value="1"/>
+        </enum>
+        <flags id="faultmask_bits" size="1">
+            <field name="prio" start="0" end="0" type="FAULTMASK"/>
+        </flags>
+        <reg name="faultmask" bitsize="1" type="faultmask_bits" regnum="22" group="system"/>
+        <enum id="nPRIV" size="1">
+            <evalue name="priv" value="0"/>
+            <evalue name="unpriv" value="1"/>
+        </enum>
+        <enum id="SPSEL" size="1">
+            <evalue name="MSP" value="0"/>
+            <evalue name="PSP" value="1"/>
+        </enum>
+        <flags id="control_bits" size="1">
+            <field name="nPRIV" start="0" end="0" type="nPRIV"/>
+            <field name="SPSEL" start="1" end="1" type="SPSEL"/>
+        </flags>
+        <reg name="control" bitsize="2" type="control_bits" regnum="23" group="system"/>
+    </feature>
+</target>

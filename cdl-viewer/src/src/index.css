@@ -1,0 +1,12 @@
+#root > .row {
+  min-height: 100vh;
+}
+
+.flex-fill {
+  flex:1 1 auto;
+}
+
+body {
+  /* sometimes scrollbars appear even if they shouldn't, so let's hide them */
+  overflow: hidden;
+}

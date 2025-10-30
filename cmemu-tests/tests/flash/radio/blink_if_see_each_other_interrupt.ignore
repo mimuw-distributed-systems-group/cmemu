@@ -1,0 +1,5 @@
+reason: Radio is not yet implemented
+ignored:
+- symbols: [timeToAck, timeToDone, status, statusInMemory]
+  configurations:
+  - { code: flash }

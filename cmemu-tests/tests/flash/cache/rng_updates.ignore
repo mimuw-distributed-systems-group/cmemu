@@ -1,0 +1,6 @@
+reason: ROM and FLASH_STAT accesses in tests panic
+ignored:
+- symbols: ["debug_sum", "address", "COMB_res_number_LEN_4_time_3_LEN_7_time2_LEN_7_time1_LEN_7_time0_LEN_7"]
+  configurations:
+  - { code: "sram", lbEn: true, pull_count: 1024, test_count: 250, test_offset: 253, test_jump: -8, extra_loads: 0, inserted_access: "rom" }
+  - { code: "sram", lbEn: true, pull_count: 1024, test_count: 250, test_offset: 253, test_jump: -8, extra_loads: 0, inserted_access: "flash_stat" }

@@ -1,0 +1,23 @@
+reason: >
+    Current bitbant is mocked-up.
+ignored:
+- symbols: ["times", "lsucnts"]
+  configurations:
+  - { code: "gpram", lbEn: True, instrsPart: 0 }
+  - {'code': 'gpram', 'lbEn': True, 'instrsPart': 1}
+  - { code: "gpram", lbEn: True, instrsPart: 2 }
+  - { code: "gpram", lbEn: True, instrsPart: 3 }
+  - { code: "flash", lbEn: True, instrsPart: 0 }
+  - { code: "flash", lbEn: True, instrsPart: 1 }
+  - { code: "flash", lbEn: True, instrsPart: 3 }
+  - { code: "flash", lbEn: False, instrsPart: 0 }
+  - { code: "flash", lbEn: False, instrsPart: 1 }
+  - { code: "flash", lbEn: False, instrsPart: 2 }
+  - { code: "flash", lbEn: False, instrsPart: 3 }
+- symbols: ["times", "lsucnts", "cpicnts"]
+  configurations:
+  - { code: "flash", lbEn: True, instrsPart: 2 }
+  - { code: "sram", lbEn: True, instrsPart: 0 }
+  - { code: "sram", lbEn: True, instrsPart: 1 }
+  - { code: "sram", lbEn: True, instrsPart: 2 }
+  - { code: "sram", lbEn: True, instrsPart: 3 }

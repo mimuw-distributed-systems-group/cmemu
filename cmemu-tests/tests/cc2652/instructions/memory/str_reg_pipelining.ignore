@@ -1,0 +1,5 @@
+reason: Relies on GPRAM a lot
+ignored:
+- symbols: []
+  configurations:
+  - {}
