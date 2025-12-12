@@ -1,12 +1,14 @@
 # CMEmu
 
-**CMEmu** is a functional and timing emulator of an [ARM Cortex-M3][cortex-m3]-based
+**CMEmu** aims to be a cycle-exact emulator of an [ARM Cortex-M3][cortex-m3]-based
 microcontroller—[Texas Instruments CC2650][ti-cc2650]—synthesized using solely
 in-code timing measurements and publicly available documentation.
 
-The ultimate goal of CMEmu is to cycle-exactly model entire microcontrollers.
-As such, it is under active development. To explain its current scope,
-consider CMEmu consists of 3 tiers (they are not expressed directly in the source):
+CMEmu is under active development. While the ultimate goal is to cycle-exactly
+model entire microcontrollers, our initial focus was the emulation of user-space
+programs. As such, CMEmu codebase currently offers 3 tiers of support (they are
+not expressed directly in the source) for various components of the microcontroller
+and emulation configurations:
 
 - **Tier 0**: is a cycle-exact model of Cortex-M3 (rev. r2p1), memories, and memory
 buses of TI CC2650 necessary to emulate execution of regular user-space programs.
@@ -15,9 +17,12 @@ memory accesses and branches), execution from Flash or GPRAM, accessing data in
 Flash or GPRAM or SRAM, supports the line buffer and Cache to be on or off
 (the in-Core store buffer has to be disabled).
 
-- **Tier 1**: is a functional and cycle-accurate model of selected other features
-of Cortex-M3 and TI CC2650: interrupts, the in-Core store buffer, sleep modes,
-RTC, PRCM, GPIO, etc. These are operational but might not be modeled in full yet.
+- **Tier 1**: is a cycle-accurate model of selected other features of Cortex-M3
+and TI CC2650: interrupts, the in-Core store buffer, sleep modes, RTC, PRCM,
+GPIO, etc. These are operational but might not be modeled in full yet.
+Moreover, emulation of userspace programs of two other chips: Cortex-M4-based
+TI CC2652 (limited to the ARMv-7M architecture) and Cortex-M3-based STM32F100
+are currently at this tier.
 
 - **Tier 2**: is an experimental model of selected remaining features of TI CC2650
 like RF core. These are under development, so they might be only partially operational.
